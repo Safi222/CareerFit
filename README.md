@@ -17,15 +17,23 @@ The application uses advanced algorithms and integrated simple AI model to match
 
 ## Authors
 
-- **Shadi Mahmoud** - [Email](shadi) - backend
-- **Ahmed Khalid** - [Email](ahmedkhaled0048@gmail.com) - backend
-- **Safia Gibril Nouman** - [Email](safia2000gibril@gmail.com) - frontend
+- **Shadi Mahmoud** - [GitHub](https://github.com/shadi) - backend developer
+- **Ahmed Khalid** - [GitHub](https://github.com/ah0048) - backend developer
+- **Safia Gibril Nouman** - [GitHub](https://github.com/safi222)  
 
 ---
 
 ## Getting Started
 
 To get a local copy up and running, follow these simple steps.
+To get started with Talkify, follow these steps:
+
+1. Clone this repository.
+2. Navigate to the api folder and install the required dependencies by running pip install -r requirements.txt.
+3. Start the API server by running python app.py.
+4. Navigate to the client folder and install the required dependencies by running npm install.
+5. Start the client development server by running npm run dev.
+That's it! You can now access CareerFit in your web browser and find the job that fits you!.
 
 ### Prerequisites
 
