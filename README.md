@@ -17,7 +17,7 @@ The application uses advanced algorithms and integrated simple AI model to match
 
 ## Authors
 
-- **Shadi Mahmoud** - [Email](shadi) - backend
+- **Shadi Mahmoud** - [Email](shadymahmod55@gmail.com) - backend
 - **Ahmed Khalid** - [Email](ahmedkhaled0048@gmail.com) - backend
 - **Safia Gibril Nouman** - [Email](safia2000gibril@gmail.com) - frontend
 
