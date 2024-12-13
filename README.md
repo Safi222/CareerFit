@@ -18,7 +18,7 @@ The application uses advanced algorithms and integrated simple AI model to match
 ## Authors
 
 - **Shadi Mahmoud** - [GitHub](https://github.com/shadi) - (shadymahmod55@gmail.com) - backend developer
-- **Ahmed Khalid** - [GitHub](https://github.com/ah0048) (ahmedkhaled0048@gmail.com) - backend developer
+- **Ahmed Khalid** - [GitHub](https://github.com/ah0048) -(ahmedkhaled0048@gmail.com) - backend developer
 - **Safia Gibril Nouman** - [GitHub](https://github.com/safi222) - (safia2000gibril@gmail.com) - Frontend developer
 
 ## Getting Started
