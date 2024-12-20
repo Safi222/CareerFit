@@ -20,6 +20,7 @@ The application uses advanced algorithms and integrated simple AI model to match
 - **Shadi Mahmoud** - [GitHub](https://github.com/shadi) - backend developer
 - **Ahmed Khalid** - [GitHub](https://github.com/ah0048) - backend develope
 - **Safia Gibril Nouman** - [GitHub](https://github.com/safi222)
+- **Khaled Mohamed Anwer** - [GitHub](https://github.com/khaledmohamed8895) - front-end
 
 ## Getting Started
 
