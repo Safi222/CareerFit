@@ -5,6 +5,8 @@ import Value from "./components/ValueD/Value";
 import Footer from "./components/FooterD/Footer";
 import Slogan from "./components/SloganD/Slogan";
 import Login from "./components/Login/Login";
+import CvPilot from "./components/CvPilot/CvPilot";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
@@ -19,6 +21,7 @@ const App = () => {
               <Slogan />
               <Search />
               <Jobs />
+              <CvPilot/>
               <Value />
               <Footer />
             </div>
