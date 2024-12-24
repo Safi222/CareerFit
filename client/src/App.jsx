@@ -6,7 +6,7 @@ import Footer from "./components/FooterD/Footer";
 import Slogan from "./components/SloganD/Slogan";
 import Login from "./components/Login/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import Register from "./components/Register/Register";
 const App = () => {
   return (
     <Router>
@@ -40,6 +40,16 @@ const App = () => {
             <div className="w-[85%] m-auto bg-white">
               <Navbar />
               <Login />
+              <Footer />
+            </div>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <div className="w-[85%] m-auto bg-white">
+              <Navbar />
+              <Register />
               <Footer />
             </div>
           }
