@@ -1,4 +1,3 @@
-import React from "react";
 import { BiTimeFive } from "react-icons/bi";
 import logo1 from "../../Assets/logo1.png";
 import logo2 from "../../Assets/logo2.png";
@@ -11,62 +10,91 @@ const Data = [
     title: "Graphic Designer",
     time: "Now",
     location: "Haiti",
-    desc: "lorem ipusm, dolor sit amet consectur adipisicing elit. Corrupti, laboriosam!",
-    company: "Vertex solutions Co.",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
+    company: "Vertex Solutions Co.",
   },
   {
     id: 2,
     image: logo2,
-    title: "Business analyst",
+    title: "Business Analyst",
     time: "3Hrs",
     location: "US",
-    desc: "lorem ipusm, dolor sit amet consectur adipisicing elit. Corrupti, laboriosam!",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
     company: "Merci Co.",
   },
   {
     id: 3,
     image: logo3,
-    title: "Backend developer",
+    title: "Backend Developer",
     time: "20Hrs",
     location: "Austria",
-    desc: "lorem ipusm, dolor sit amet consectur adipisicing elit. Corrupti, laboriosam!",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
     company: "Noka Tech Co.",
   },
+  {
+    id: 4,
+    image: logo3,
+    title: "Backend Developer",
+    time: "20Hrs",
+    location: "Austria",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
+    company: "Noka Tech Co.",
+  },
+  {
+    id: 5,
+    image: logo3,
+    title: "Backend Developer",
+    time: "20Hrs",
+    location: "Austria",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
+    company: "Noka Tech Co.",
+  },
+  {
+    id: 6,
+    image: logo3,
+    title: "Backend Developer",
+    time: "20Hrs",
+    location: "Austria",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
+    company: "Noka Tech Co.",
+  },
+  // Add more job data as needed
 ];
+
 const Jobs = () => {
   return (
-    <div>
-      <div className="jobContainer flex gap-10 justify-center flex-wrap items-center py-10">
+    <div className="container mx-auto px-4">
+      <div className="jobContainer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
         {Data.map(({ id, image, title, time, location, desc, company }) => {
           return (
             <div
               key={id}
-              className="group group/item singleJob w-[250px] p-[20px] bg-white rounded[10px] hover:bg-orangeColor shadow-lg shadow-greyIsh-400/700 hover:shadow-lg"
+              className="group singleJob p-4 bg-white rounded-lg shadow-lg hover:bg-orange-500 transition duration-300"
             >
               <span className="flex justify-between items-center gap-4">
-                <h1 className="text-[15px] font-semibold text-textColor group-hover:text-white">
+                <h1 className="text-lg font-semibold text-gray-800 group-hover:text-white">
                   {title}
                 </h1>
-                <span className="flex items-center text-[#ccc] gap-1">
+                <span className="flex items-center text-gray-400 gap-1">
                   <BiTimeFive />
                   {time}
                 </span>
               </span>
 
-              <h6 className="text-[#ccc]">{location}</h6>
+              <h6 className="text-gray-500">{location}</h6>
 
-              <p className="text-[13px] text-[#959595] pt-[20px] border-t-[2px] mt-[20px] group-hover:text-white">
+              <p className="text-sm text-gray-600 pt-4 border-t mt-4 group-hover:text-white">
                 {desc}
               </p>
 
-              <div className="company flex items-center gap-2">
-                <img src={image} alt="Company logo" className="w-[10%]" />
-                <span className="text-[14px] py-[1rem] block group-hover:text-white">
+              <div className="company flex items-center gap-2 mt-4">
+                <img src={image} alt={`${company} logo`} className="w-12 h-12 object-cover" />
+                <span className="text-md py-2 block group-hover:text-white">
                   {company}
                 </span>
               </div>
 
-              <button className="border-[2px] rounded-[10px] block p-[10px] w-full text-[14px] font-semibold text-textColor hover:bg-white group-hover/item:text-textColor group-hover:text-orangeColor">
+              <button className="border-2 rounded-lg block p-2 w-full text-md font-semibold text-gray-800 hover:bg-white group-hover:text-gray-800 group-hover:bg-orange-500 transition duration-300">
                 Fit in Now
               </button>
             </div>
