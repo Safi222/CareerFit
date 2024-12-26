@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { GiUpgrade } from "react-icons/gi";
 import { MdAssessment } from "react-icons/md";
 import { MdRecommend } from "react-icons/md";
 import { MdPrivacyTip } from "react-icons/md";
-// import { FaRobot } from "react-icons/fa";
+import Cvpilot from "../../Assets/Cvpilot.png";
 
 const FeaturesData = [
   {
@@ -34,9 +35,16 @@ const FeaturesData = [
 
 const CVPilot = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const navigate = useNavigate();
 
   const handleAnalyzeClick = () => {
-    setIsModalOpen(true);
+    if (isLoggedIn) {
+      setIsModalOpen(true);
+    } else {
+      alert("You need to log in to use this feature!"); 
+      navigate("/login");
+    }
   };
 
   const closeModal = () => {
@@ -44,20 +52,30 @@ const CVPilot = () => {
   };
 
   return (
-    <div className="container mx-auto px-6 py-6">
+    <div className="container mx-auto px-6 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        
+        {/* Right Components */}
         <div>
-        <div className="border-t border-gray-300 my-9"></div> 
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">
-                Hello, My name is CvPilot</h1>
-
-            <h2 className="text-xl text-gray-600 mb-9 ">
-                I'm here to assist you to find your Career Fit ...</h2>
+          <h1 className="text-3xl font-bold text-gray-800 mb-6">
+            Hello, My name is CvPilot
+          </h1>
+          <h2 className="text-xl text-gray-600 mb-9">
+            I'm here to assist you to find your Career Fit ...
+          </h2>
         </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+        {/* Left Components */}
+        <div className="text-center">
+          <img src={Cvpilot} alt="CvPilot" className="w-80 h-auto mx-auto" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
         {FeaturesData.map(({ id, icon, title, desc }) => (
           <div
             key={id}
-            className="group p-4 bg-white rounded-lg shadow-lg hover:bg-orangeColor  transition duration-300"
+            className="group p-4 bg-white rounded-lg shadow-lg hover:bg-orange-400 transition duration-300"
           >
             <div className="text-center mb-4">{icon}</div>
             <h3 className="text-lg font-semibold text-gray-800 group-hover:text-white">
@@ -70,13 +88,8 @@ const CVPilot = () => {
         ))}
       </div>
 
-      {/* File Upload and Analyze Section */}
       <div className="mt-10 text-center">
-        <input
-          type="file"
-          id="cv-upload"
-          className="block mx-auto mb-4"
-        />
+        <input type="file" id="cv-upload" className="block mx-auto mb-4" />
         <button
           onClick={handleAnalyzeClick}
           className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
@@ -85,26 +98,25 @@ const CVPilot = () => {
         </button>
       </div>
 
-      {/* Login Modal */}
+
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg text-center">
-            <p className="text-gray-800 mb-4">
-              You need to log in to access this feature. Your privacy is preserved!
+          <div className="bg-white p-6 rounded-lg text-center gap-3">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              CV Analysis Results
+            </h2>
+            <p className="text-gray-600 mb-2">
+              Your CV scored <span className="font-bold text-green-600">85/100</span> points.
             </p>
-            <div className="flex justify-center gap-4">
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
-              >
-                Log In
-              </button>
-              <button
-                onClick={closeModal}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-              >
-                Close
-              </button>
-            </div>
+            <p className="text-gray-600 mb-6">
+              Recommended jobs: Software Engineer, Data Scientist, Product Manager.
+            </p>
+            <button
+              onClick={closeModal}
+              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}
