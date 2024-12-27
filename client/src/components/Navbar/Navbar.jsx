@@ -36,16 +36,13 @@ const Navbar = () => {
           <NavLink to={"/jobs"}>Jobs</NavLink>
         </li>
         <li className="menuList text-gray-600 px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
-          <NavLink to={"/companies"}>CvPilot</NavLink>
+          <NavLink to={"/cvpilot"}>CvPilot</NavLink>
         </li>
         <li className="menuList text-gray-600 px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
           <NavLink to={"/about"}>About</NavLink>
         </li>
         <li className="menuList text-gray-600 px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
           <NavLink to={"/contact"}>Contact</NavLink>
-        </li>
-        <li className="menuList text-gray-600 px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
-          <NavLink to={"/blog"}>Blog</NavLink>
         </li>
         <li className="menuList text-gray-600 px-4 py-2 rounded-lg hover:bg-orange-500 hover:text-white transition-all duration-300 ease-in-out cursor-pointer">
           <NavLink to={"/login"}>Login</NavLink>

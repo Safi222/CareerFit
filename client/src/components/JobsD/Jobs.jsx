@@ -1,4 +1,5 @@
 import { BiTimeFive } from "react-icons/bi";
+import { Link } from "react-router-dom";  // Import Link for navigation
 import logo1 from "../../Assets/logo1.png";
 import logo2 from "../../Assets/logo2.png";
 import logo3 from "../../Assets/logo3.png";
@@ -57,8 +58,23 @@ const Data = [
     location: "Austria",
     desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
     company: "Noka Tech Co.",
+  }, {
+    id: 7,
+    image: logo1,
+    title: "Graphic Designer",
+    time: "Now",
+    location: "Haiti",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
+    company: "Vertex Solutions Co.",
+  }, {
+    id: 8,
+    image: logo1,
+    title: "Graphic Designer",
+    time: "Now",
+    location: "Haiti",
+    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
+    company: "Vertex Solutions Co.",
   },
-  // Add more job data as needed
 ];
 
 const Jobs = () => {
@@ -100,6 +116,15 @@ const Jobs = () => {
             </div>
           );
         })}
+      </div>
+      
+      {/* Add the View More Fits button with Link */}
+      <div className="text-center mt-6">
+        <Link to="/jobs"> 
+          <button className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition">
+            View More Fits
+          </button>
+        </Link>
       </div>
     </div>
   );
