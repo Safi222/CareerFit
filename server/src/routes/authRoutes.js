@@ -5,9 +5,6 @@ const auth = Route()
 
 auth.post('/register', validatorMiddleware.registerValidator(), authController.registerController)
 
-auth.post('/login', (req, res)=>{
-	res.json({msg: "login endpoint exist"
-	})
-})
+auth.post('/login', validatorMiddleware.loginValidator(), authController.loginController)
 
 module.exports = auth
