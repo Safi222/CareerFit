@@ -12,12 +12,10 @@ passport.use(new GoogleStrategy({
 			const newUser = new User({
 				firstName: profile.name.givenName,
 				lastName: profile.name.familyName,
-				email:profile.emails[0].value || "",
-				profilePic:profile.photos[0].value || "",
 				googleId: profile.id
 			})
 			await newUser.save()
-			return cb(null, newUser)
+			cb(null, newUser)
 		}
 		cb(null, currentUser)
 	}

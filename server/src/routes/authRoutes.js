@@ -10,9 +10,9 @@ auth.post('/register', validatorMiddleware.registerValidator(), authController.r
 auth.post('/login', validatorMiddleware.loginValidator(), authController.loginController)
 
 auth.get('/google',
-	passport.authenticate('google', { scope: ['profile'] }));
+	passport.authenticate('google', { scope: ['profile'], session: false }));
 
 auth.get('/google/callback',
-	passport.authenticate('google', { failureRedirect: '/login' }), authController.googleAuth);
+	passport.authenticate('google', { failureRedirect: '/login' , session: false}), authController.googleAuth);
 
 module.exports = auth
