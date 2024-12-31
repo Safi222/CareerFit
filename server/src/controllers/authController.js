@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const validation = require('express-validator')
 const registerController = async (req, res) => {
 	const errors = validation.validationResult(req)
@@ -21,14 +22,16 @@ const registerController = async (req, res) => {
 			}
 		)
 	}
+	const salt = await bcrypt.genSalt(10);
+	const hashedPassword = await bcrypt.hash(password, salt);
 	const user = new User({
 		firstName,
 		lastName,
 		email,
-		password
+		password: hashedPassword
 	})
 	await user.save()
-	token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user._id }, "bla bla", { expiresIn: '1d' })
+	token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, "bla bla", { expiresIn: '1d' })
 	return res.status(201).json(
 		{
 			status: "success",
@@ -59,7 +62,7 @@ const loginController = async (req, res) => {
 			}
 		)
 	}
-	token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user._id }, "bla bla", { expiresIn: '1d' })
+	token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, "bla bla", { expiresIn: '1d' })
 	return res.status(200).json(
 		{
 			status: "success",
@@ -70,7 +73,19 @@ const loginController = async (req, res) => {
 	)
 }
 
+const googleAuth = async (req, res)=>{
+	token = 'Bearer ' + await jwt.sign({ firstName: req.user.firstName, id: req.user.id }, "bla bla", { expiresIn: '1d' })
+	return res.status(200).json(
+		{
+			status: "success",
+			data: {
+				token
+			}
+		}
+	)
+}
 module.exports = {
 	registerController,
-	loginController
+	loginController,
+	googleAuth
 }
