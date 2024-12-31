@@ -4,15 +4,15 @@ const jwt = require('jsonwebtoken')
 const validation = require('express-validator')
 const registerController = async (req, res) => {
 	const errors = validation.validationResult(req)
-	if (!errors.isEmpty()){
+	if (!errors.isEmpty()) {
 		return res.status(400).json({
-			status : "fail",
-			"data" : errors.array()[0]
+			status: "fail",
+			"data": errors.array()[0]
 		})
 	}
 	const { firstName, lastName, email, password } = req.body;
-	const oldUser = await User.findOne({email: email})
-	if (oldUser){
+	const oldUser = await User.findOne({ email: email })
+	if (oldUser) {
 		return res.status(400).json(
 			{
 				status: "success",
@@ -22,12 +22,11 @@ const registerController = async (req, res) => {
 			}
 		)
 	}
-	const hashedPassword = await bcrypt.hash(password, 10);
 	const user = new User({
 		firstName,
 		lastName,
 		email,
-		password: hashedPassword
+		password
 	})
 	await user.save()
 	token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user._id }, "bla bla", { expiresIn: '1d' })
@@ -41,23 +40,23 @@ const registerController = async (req, res) => {
 	)
 }
 
-const loginController = async (req, res) =>{
+const loginController = async (req, res) => {
 	const { email, password } = req.body;
-	const user = await User.findOne({email: email});
-	if (!user){
+	const user = await User.findOne({ email: email });
+	if (!user) {
 		return res.status(404).json(
 			{
-				"status" : "fail",
-				"data" : { "title" : "User Not Found" }
+				"status": "fail",
+				"data": { "title": "User Not Found" }
 			}
 		)
 	}
-	const result = await bcrypt.compare(password, user.password)
-	if (!result){
+	const result = await user.matchPassword(password)
+	if (!result) {
 		return res.status(400).json(
 			{
-				"status" : "fail",
-				"data" : { "title" : "Wrong password" }
+				"status": "fail",
+				"data": { "title": "Wrong password" }
 			}
 		)
 	}
