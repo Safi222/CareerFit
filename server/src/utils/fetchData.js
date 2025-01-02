@@ -18,7 +18,6 @@ async function getdata(query = 'software engineer', page = 1, country = 'eg') {
 			method: 'GET',
 			headers
 		});
-
 		if (!response.ok) {
 			throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
 		}
