@@ -25,8 +25,9 @@ const uploadCvFile = async (filePath, folder) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       folder,
-      resource_type: 'raw',
+      resource_type: 'auto',
       type: "upload", // Ensures the file is publicly accessible
+      access_mode: "public", // Explicitly set public access
     });
     return result;
   } catch (error) {
