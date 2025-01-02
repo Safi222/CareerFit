@@ -23,7 +23,7 @@ async function getdata(query = 'software engineer', page = 1, country = 'eg') {
 		}
 
 		const data = await response.json();
-		return data;
+		return data.data;
 	} catch (error) {
 		console.error(`Error fetching data: ${error.message}`);
 		return null;
