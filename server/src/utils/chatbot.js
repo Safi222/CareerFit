@@ -33,5 +33,4 @@ async function run() {
     return JSON.parse(result.response.text());
 }
 
-
 module.exports = run;
