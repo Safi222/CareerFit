@@ -22,8 +22,7 @@ const uploadProfilePicture = async (req, res) => {
 
     res.status(200).json({ 
       message: 'Profile picture uploaded successfully', 
-      profilePic: result.secure_url,
-      user 
+      profilePic: result.secure_url
     });
   } catch (error) {
     console.error(error);
@@ -51,8 +50,7 @@ const uploadCV = async (req, res) => {
 
     res.status(200).json({ 
       message: 'CV uploaded successfully', 
-      cvFile: result.secure_url,
-      user 
+      cvFile: result.secure_url
     });
   } catch (error) {
     console.error(error);
