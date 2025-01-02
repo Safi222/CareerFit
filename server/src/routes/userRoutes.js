@@ -2,6 +2,7 @@ const express = require('express');
 const { uploadPic, uploadcv } = require('../middlewares/fileUpload');
 const { uploadProfilePicture, uploadCV } = require('../controllers/userController');
 const { authorizationVerfication } = require('../middlewares/authMiddleware');
+const malwareScanMiddleware = require('../middlewares/malwareScanMiddleware');
 
 const userRoutes = express.Router();
 
