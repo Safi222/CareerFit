@@ -29,3 +29,5 @@ async function getdata(query = 'software engineer', page = 1, country = 'eg') {
 		return null;
 	}
 }
+
+module.exports = getdata;
