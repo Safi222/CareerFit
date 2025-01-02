@@ -3,6 +3,7 @@ const express = require('express');
 const connectDatabase = require('./config/database');
 const auth = require("./routes/authRoutes")
 const jobFind = require('./routes/jobRoutes')
+const userRoutes = require('./routes/userRoutes')
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use('/api/auth', auth)
 app.use('/api/jobs', jobFind)
+app.use('/api/users', userRoutes)
 // Connect to MongoDB
 connectDatabase();
 
