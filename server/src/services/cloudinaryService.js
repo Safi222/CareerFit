@@ -3,7 +3,7 @@ const cloudinary = require('../config/cloudinary');
 // Delete a file from Cloudinary
 const deleteFileFromCloudinary = async (publicId) => {
   try {
-    await cloudinary.uploader.destroy(publicId);
+    await cloudinary.uploader.destroy(publicId, { invalidate: true });
   } catch (error) {
     console.error('Cloudinary Delete Error:', error);
     throw new Error('Failed to delete file from Cloudinary');
