@@ -15,7 +15,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 };
-app.use(cors(corsOptions)); // Use CORS middleware
+app.use(cors()); // Use CORS middleware
 
 // Middleware
 app.use(express.json());

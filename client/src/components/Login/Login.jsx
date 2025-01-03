@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import google_icon from "../../Assets/google_icon.png";
 
 const Login = () => {
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [password, setPassword] = useState("Password123");
+  const [email, setEmail] = useState("ahmed@gmail.com");
+  const [password, setPassword] = useState("passWord&123");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ const Login = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`${serverUri}/auth/register`, {
+      const response = await fetch(`${serverUri}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
