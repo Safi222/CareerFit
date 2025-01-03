@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const User = require('../models/User');
 
 const authorizationVerfication = async (req, res, next) => {
 	const authHeader = req.get("Authorization") || req.get("authorization")
@@ -25,6 +26,13 @@ const authorizationVerfication = async (req, res, next) => {
 	}
 	try {
 		const decodedToken = jwt.verify(token, 'bla bla')
+		const user = await User.findOne({ _id: decodedToken.id });
+		if (!user) {
+            return res.status(401).json({
+                status: "fail",
+                data: { title: "Unauthorized: User not found" }
+            });
+        }
 		req.user = {
 			firstName: decodedToken.firstName,
 			id: decodedToken.id

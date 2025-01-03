@@ -4,30 +4,48 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
+        required: true
     },
     lastName: {
         type: String,
+        required: true
     },
     email: {
         type: String,
+        sparse: true,
+        unique: true, // This ensures email uniqueness
         match: [/\S+@\S+\.\S+/, 'Invalid email format'],
     },
     password: {
         type: String,
         minlength: 6,
+        // Make it required only for regular registration
+        required: function() {
+            return !this.googleId; // Password required only if not using Google OAuth
+        }
     },
     profilePic: {
-        type: String, // URL to Cloudinary
+        type: String,
+        default: ''
     },
-    cv: {
-        type: String, // URL to Cloudinary
+    cvFile: {
+        type: String,
+        default: ''
     },
     appliedJobs: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Job', // Reference to the Job model
-    }, ],
+        ref: 'Job',
+    }],
     googleId: {
         type: String,
+        sparse: true, // Allows null values to not be indexed
+        unique: true // Only unique when present
+    },
+    authType: {
+        type: String,
+        enum: ['local', 'google'],
+        required: true,
+        default: 'local'
     }
 }, { timestamps: true });
 
