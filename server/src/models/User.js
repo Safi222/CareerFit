@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
-        unique: true,  // This ensures email uniqueness
+        sparse: true,
+        unique: true, // This ensures email uniqueness
         match: [/\S+@\S+\.\S+/, 'Invalid email format'],
     },
     password: {
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
         minlength: 6,
         // Make it required only for regular registration
         required: function() {
-            return !this.googleId;  // Password required only if not using Google OAuth
+            return !this.googleId; // Password required only if not using Google OAuth
         }
     },
     profilePic: {
@@ -38,8 +38,8 @@ const userSchema = new mongoose.Schema({
     }],
     googleId: {
         type: String,
-        sparse: true,  // Allows null values to not be indexed
-        unique: true   // Only unique when present
+        sparse: true, // Allows null values to not be indexed
+        unique: true // Only unique when present
     },
     authType: {
         type: String,
