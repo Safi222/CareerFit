@@ -7,7 +7,7 @@ const { fetchJobs } = require('../services/jobService');
  */
 const getJobs = async (req, res) => {
   try {
-    const query = req.query.q || 'tech jobs in Egypt'; // Default query
+    const query = req.query.query || 'tech jobs in Egypt'; // Default query
 	const page = req.query.page;
 	const num_pages = req.query.num_pages
     const jobs = await fetchJobs(query, page, num_pages);
