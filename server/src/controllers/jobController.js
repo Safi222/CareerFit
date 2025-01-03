@@ -1,27 +1,21 @@
-const getdata = require('../utils/fetchData')
+const { fetchJobs } = require('../services/jobService');
 
-const jobFetchController = async(req, res) => {
-	try{
-		const data = await getdata(req.query.query, req.query.page, req.query.country)
-		return res.status(200).json(
-			{
-				status: "success",
-				data: {
-					data
-				}
-			}
-		)
-	}
-	catch (error){
-		res.status(200).json(
-			{
-				status: "fail",
-				data: {
-					title: error.message
-				}
-			}
-		)
-	}
-}
+/**
+ * Get jobs based on query.
+ * @param {object} req - Express request object.
+ * @param {object} res - Express response object.
+ */
+const getJobs = async (req, res) => {
+  try {
+    const query = req.query.q || 'tech jobs in Egypt'; // Default query
+	const page = req.query.page;
+	const num_pages = req.query.num_pages
+    const jobs = await fetchJobs(query, page, num_pages);
+    res.status(200).json(jobs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch jobs' });
+  }
+};
 
-module.exports = jobFetchController;
+module.exports = { getJobs };

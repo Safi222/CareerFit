@@ -1,8 +1,9 @@
-const jobFind = require('express').Router()
+const express = require('express');
+const { getJobs } = require('../controllers/jobController');
 
-const jobFetchController = require('../controllers/jobController')
+const jobRoutes = express.Router();
 
-jobFind.get('/jobSearching', jobFetchController)
+// Route to get jobs
+jobRoutes.get('/home', getJobs);
 
-
-module.exports = jobFind;
+module.exports = jobRoutes;
