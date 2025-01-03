@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import google_icon from "../../Assets/google_icon.png";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("john.doe@example.com");
+  const [password, setPassword] = useState("Password123");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const serverUri = import.meta.env.VITE_SERVER_URI;
 
   const dummyUsers = [
     {
@@ -47,6 +50,36 @@ const Login = () => {
     } else {
       setError("Invalid email or password");
     }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${serverUri}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to register user");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("token", data.token); // Save token to localStorage
+      console.log("Token saved:", data.token);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []); // Call fetchData when the component mounts
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${serverUri}/auth/google`;
   };
 
   return (
@@ -96,6 +129,15 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="mt-4 text-center">
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center bg-greyIsh text-black p-2 rounded-md hover:bg-gray-300 transition duration-200"
+          >
+            <img src={google_icon} alt="google" className="h-5 w-5 mr-2" />
+            Login with Google
+          </button>
+        </div>
       </div>
     </div>
   );
