@@ -1,12 +1,16 @@
-// src/services/cloudinaryService.js
 const cloudinary = require('../config/cloudinary');
 
-/**
- * Upload a file to Cloudinary.
- * @param {string} filePath - Path to the file to upload.
- * @param {string} folder - Folder in Cloudinary to save the file.
- * @returns {Promise<object>} - Uploaded file details.
- */
+// Delete a file from Cloudinary
+const deleteFileFromCloudinary = async (publicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (error) {
+    console.error('Cloudinary Delete Error:', error);
+    throw new Error('Failed to delete file from Cloudinary');
+  }
+};
+
+// Upload file to Cloudinary (Profile Pic)
 const uploadProfilePic = async (filePath, folder) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
@@ -21,6 +25,7 @@ const uploadProfilePic = async (filePath, folder) => {
   }
 };
 
+// Upload file to Cloudinary (CV)
 const uploadCvFile = async (filePath, folder) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
@@ -36,4 +41,4 @@ const uploadCvFile = async (filePath, folder) => {
   }
 };
 
-module.exports = { uploadProfilePic, uploadCvFile };
+module.exports = { uploadProfilePic, uploadCvFile, deleteFileFromCloudinary };

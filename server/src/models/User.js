@@ -26,9 +26,11 @@ const userSchema = new mongoose.Schema({
     },
     profilePic: {
         type: String,
+        default: ''
     },
     cvFile: {
         type: String,
+        default: ''
     },
     appliedJobs: [{
         type: mongoose.Schema.Types.ObjectId,
