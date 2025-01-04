@@ -2,9 +2,12 @@ const fs = require('fs/promises');
 const pdf = require('pdf-parse');
 
 
-const cvData = async() => {
-    const fileContent = await fs.readFile('path')
+const cvData = async(filePath) => {
+    const fileContent = await fs.readFile(filePath)
     const parsedData = await pdf(fileContent)
+    if (!parsedData.text) {
+        return null
+    }
     return parsedData.text
 }
 
