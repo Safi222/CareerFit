@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = (user) => {
+const Dashboard = (props) => {
   const navigate = useNavigate();
-
+  const user = props.user;
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
