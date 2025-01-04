@@ -1,23 +1,23 @@
 const axios = require('axios')
 const fs = require('fs')
-const cloudinary = require('../config/cloudinary');
-
-const downloadPdf = async(publicId) => {
+const User = require('../models/User')
+const downloadPdf = async(id) => {
     try {
-        const filePath = `../PDF/${publicId}`
-        const fileUrl = cloudinary.url(publicId, { resource_type: 'raw' });
+        const user = await User.findById(id)
+        const fileUrl = user.cvFile;
+        const filePath = `../PDF/${id}.pdf`
         const response = await axios.get(fileUrl, { responseType: 'stream' });
 
         const writer = fs.createWriteStream(filePath);
         response.data.pipe(writer);
 
-        await new Promise((resolve, rejects) => {
+        await new Promise((resolve, reject) => {
             writer.on('finish', resolve);
-            writer.on('error', rejects);
+            writer.on('error', reject);
         })
         return filePath
     } catch (err) {
-        return null
+        return err
     }
 };
 
