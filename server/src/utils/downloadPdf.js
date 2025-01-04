@@ -4,6 +4,9 @@ const User = require('../models/User')
 const downloadPdf = async(id) => {
     try {
         const user = await User.findById(id)
+        if (!user.cvFile) {
+            return null
+        }
         const fileUrl = user.cvFile;
         const filePath = `../PDF/${id}.pdf`
         const response = await axios.get(fileUrl, { responseType: 'stream' });
