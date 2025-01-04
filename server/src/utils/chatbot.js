@@ -18,7 +18,7 @@ const generationConfig = {
     responseMimeType: "application/json",
 };
 
-async function run() {
+async function run(content) {
     const chatSession = model.startChat({
         generationConfig,
         history: [{
@@ -29,7 +29,7 @@ async function run() {
         }, ]
     });
 
-    const result = await chatSession.sendMessage(JSON.stringify(userInput));
+    const result = await chatSession.sendMessage(JSON.stringify(content));
     return JSON.parse(result.response.text());
 }
 
