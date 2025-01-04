@@ -1,55 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import google_icon from "../../Assets/google_icon.png";
 
 const Login = () => {
-  const [email, setEmail] = useState("ahmed@gmail.com");
-  const [password, setPassword] = useState("passWord&123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const serverUri = import.meta.env.VITE_SERVER_URI;
 
-  const dummyUsers = [
-    {
-      email: "john.doe@example.com",
-      password: "Password123",
-      dashboard: "/dashboard/john",
-    },
-    {
-      email: "jane.smith@example.com",
-      password: "MyPassword456",
-      dashboard: "/dashboard/jane",
-    },
-    {
-      email: "alex.jones@example.com",
-      password: "SecurePass789",
-      dashboard: "/dashboard/alex",
-    },
-    {
-      email: "emily.white@example.com",
-      password: "TestPassword321",
-      dashboard: "/dashboard/emily",
-    },
-    {
-      email: "michael.brown@example.com",
-      password: "1234abcd",
-      dashboard: "/dashboard/michael",
-    },
-  ];
-
   const handleLogin = (e) => {
     e.preventDefault();
 
-    const user = dummyUsers.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
-      navigate(user.dashboard);
-    } else {
-      setError("Invalid email or password");
-    }
+    fetchData();
   };
 
   const fetchData = async () => {
@@ -62,21 +26,20 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to register user");
-      }
-
       const data = await response.json();
-      localStorage.setItem("token", data.token); // Save token to localStorage
-      console.log("Token saved:", data.token);
+      if (data.status == "fail") {
+        setError(data.data.msg);
+        throw new Error(data.data.msg);
+      } else {
+        localStorage.setItem("token", data.data.token); // Save token to localStorage
+        
+        navigate('/dashboard');
+        console.log("Token saved:", data.data.token);
+      }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []); // Call fetchData when the component mounts
 
   const handleGoogleLogin = () => {
     window.location.href = `${serverUri}/auth/google`;

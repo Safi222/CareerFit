@@ -5,9 +5,33 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const serverUri = import.meta.env.VITE_SERVER_URI;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await fetch(`${serverUri}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ firstName, lastName, email, password }),
+      });
+
+      const data = await response.json();
+      if (data.status === "fail") {
+        setError(data.data.msg);
+        throw new Error(data.data.msg);
+      } else {
+        localStorage.setItem("token", data.data.token); // Save token to localStorage
+        console.log("Token saved:", data.data.token);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+
     // Log the input values to the console instead of sending them
     console.log("Entered data:", { firstName, lastName, email, password });
   };
@@ -75,6 +99,7 @@ const Register = () => {
             required
           />
         </div>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         <button
           type="submit"
