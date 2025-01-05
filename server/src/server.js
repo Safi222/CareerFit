@@ -6,6 +6,7 @@ const auth = require("./routes/authRoutes");
 const jobRoutes = require('./routes/jobRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cvAnalyzer = require('./routes/cvAnalyzer')
+const rateLimitMiddleware = require('./middlewares/rateLimitMiddleware')
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -19,6 +20,7 @@ app.use(cors()); // Use CORS middleware
 
 // Middleware
 app.use(express.json());
+app.use(rateLimitMiddleware())
 app.use('/api/auth', auth);
 app.use('/api/jobs', jobRoutes);
 app.use('/api/users', userRoutes);
