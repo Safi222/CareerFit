@@ -11,10 +11,23 @@ const getJobs = async (req, res) => {
 	const page = req.query.page;
 	const num_pages = req.query.num_pages
     const jobs = await fetchJobs(query, page, num_pages);
-    res.status(200).json(jobs);
+    return res.status(200).json(
+      {
+        status: "success",
+        data: {
+          jobs
+        }
+      });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Failed to fetch jobs' });
+    return res.status(500).json(
+			{
+				status: "fail",
+				data: {
+					msg: 'Failed to fetch jobs'
+				}
+			}
+		)
   }
 };
 
@@ -31,10 +44,23 @@ const searchJobsController = async (req, res) => {
 		const query = `${title?title:''} ${location?location:''} ${type?type:''} ${level?level:''}`
 
         const jobs = await searchJobs(query, page, num_pages);
-        res.status(200).json(jobs);
+        return res.status(200).json(
+          {
+            status: "success",
+            data: {
+              jobs
+            }
+          });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Failed to search for jobs' });
+        return res.status(500).json(
+          {
+            status: "fail",
+            data: {
+              msg: 'Failed to fetch jobs'
+            }
+          }
+        )
     }
 };
 
