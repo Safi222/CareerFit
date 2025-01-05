@@ -31,7 +31,7 @@ const registerController = async(req, res) => {
         password: hashedPassword
     })
     await user.save()
-    token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, "bla bla", { expiresIn: '1d' })
+    token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
     return res.status(201).json({
         status: "success",
         data: {
@@ -56,7 +56,7 @@ const loginController = async(req, res) => {
             "data": { "title": "Wrong password" }
         })
     }
-    token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, "bla bla", { expiresIn: '1d' })
+    token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
     return res.status(200).json({
         status: "success",
         data: {
@@ -66,7 +66,7 @@ const loginController = async(req, res) => {
 }
 
 const googleAuth = async(req, res) => {
-    token = 'Bearer ' + await jwt.sign({ firstName: req.user.firstName, id: req.user.id }, "bla bla", { expiresIn: '1d' })
+    token = 'Bearer ' + await jwt.sign({ firstName: req.user.firstName, id: req.user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
     return res.status(200).json({
         status: "success",
         data: {
