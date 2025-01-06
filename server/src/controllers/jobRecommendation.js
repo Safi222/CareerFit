@@ -5,32 +5,41 @@ const pdfParser = require('../utils/pdfParser')
 
 
 const recommendedTitles = async(req, res) => {
-    const id = req.user.id;
-    const filePath = await downloadPdf(id)
-    if (!filePath) {
-        if (filePath === null)
-            return res.status(404).json({
-                status: "fail",
-                "data": {
-                    title: "cv not found"
-                }
-            })
-        else {
-            return res.status(404).json({
-                status: "fail",
-                "data": {
-                    title: "error while preparing your cv"
-                }
-            })
+    try {
+        const id = req.user.id;
+        const filePath = await downloadPdf(id)
+        if (!filePath) {
+            if (filePath === null)
+                return res.status(404).json({
+                    status: "fail",
+                    "data": {
+                        title: "cv not found"
+                    }
+                })
+            else {
+                return res.status(404).json({
+                    status: "fail",
+                    "data": {
+                        title: "error while preparing your cv"
+                    }
+                })
+            }
         }
+        const content = await pdfParser(filePath)
+        deletePdf(filePath)
+        const recommendation = await chatBot(content)
+        return res.status(200).json({
+            status: "success",
+            "data": { recommendation }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            data: {
+                title: "internal server error"
+            }
+        })
     }
-    const content = await pdfParser(filePath)
-    deletePdf(filePath)
-    const recommendation = await chatBot(content)
-    return res.status(200).json({
-        status: "success",
-        "data": { recommendation }
-    })
 }
 
 module.exports = recommendedTitles;
