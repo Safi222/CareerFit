@@ -11,12 +11,16 @@ const recommendedTitles = async(req, res) => {
         if (filePath === null)
             return res.status(404).json({
                 status: "fail",
-                "data": "cv not found"
+                "data": {
+                    title: "cv not found"
+                }
             })
         else {
             return res.status(404).json({
                 status: "fail",
-                "data": "error while preparing your cv"
+                "data": {
+                    title: "error while preparing your cv"
+                }
             })
         }
     }
@@ -25,7 +29,7 @@ const recommendedTitles = async(req, res) => {
     const recommendation = await chatBot(content)
     return res.status(200).json({
         status: "success",
-        "data": recommendation
+        "data": { recommendation }
     })
 }
 
