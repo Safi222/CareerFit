@@ -17,7 +17,10 @@ const generationConfig = {
     maxOutputTokens: 8192,
     responseMimeType: "application/json",
 };
-
+/**
+ * @param {Object} content - The content containing user inputs such as skills, experience, education, and preferences.
+ * @returns {Promise<Object>} - The response from the generative AI model, including job recommendations.
+ */
 async function run(content) {
     const chatSession = model.startChat({
         generationConfig,
