@@ -3,6 +3,15 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const validation = require('express-validator');
 const { createToken } = require('../utils/jwtHelper');
+
+/**
+ * Register a new user.
+ * 
+ * @params {Object} req - The request object containing user data (firstName, lastName, email, password).
+ * @params {Object} res - The response object to send the response back to the client.
+ * 
+ * @returns {Object} JSON response with status and data (token or error message).
+ */
 const registerController = async(req, res) => {
     try {
         const errors = validation.validationResult(req)
@@ -14,6 +23,7 @@ const registerController = async(req, res) => {
                 }
             })
         }
+
         const { firstName, lastName, email, password } = req.body;
         const oldUser = await User.findOne({ email: email })
         if (oldUser) {
@@ -24,6 +34,7 @@ const registerController = async(req, res) => {
                 }
             })
         }
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const user = new User({
@@ -33,7 +44,8 @@ const registerController = async(req, res) => {
             password: hashedPassword
         })
         await user.save()
-        token = await createToken(user)
+
+        const token = await createToken(user)
         return res.status(201).json({
             status: "success",
             data: {
@@ -50,6 +62,14 @@ const registerController = async(req, res) => {
     }
 }
 
+/**
+ * Login a user.
+ * 
+ * @params {Object} req - The request object containing login credentials (email, password).
+ * @params {Object} res - The response object to send the response back to the client.
+ * 
+ * @returns {Object} JSON response with status and data (token or error message).
+ */
 const loginController = async(req, res) => {
     try {
         const { email, password } = req.body;
@@ -60,6 +80,7 @@ const loginController = async(req, res) => {
                 "data": { "title": "User Not Found" }
             })
         }
+
         const result = await user.matchPassword(password)
         if (!result) {
             return res.status(400).json({
@@ -67,7 +88,8 @@ const loginController = async(req, res) => {
                 "data": { "title": "Wrong password" }
             })
         }
-        token = await createToken(user)
+
+        const token = await createToken(user)
         return res.status(200).json({
             status: "success",
             data: {
@@ -84,9 +106,17 @@ const loginController = async(req, res) => {
     }
 }
 
+/**
+ * Handle Google Authentication.
+ * 
+ * @params {Object} req - The request object containing the authenticated user's information.
+ * @params {Object} res - The response object to send the response back to the client.
+ * 
+ * @returns {Object} JSON response with status and data (token).
+ */
 const googleAuth = async(req, res) => {
     try {
-        token = await createToken(req.user)
+        const token = await createToken(req.user)
         return res.status(200).json({
             status: "success",
             data: {
@@ -102,6 +132,7 @@ const googleAuth = async(req, res) => {
         })
     }
 }
+
 module.exports = {
     registerController,
     loginController,

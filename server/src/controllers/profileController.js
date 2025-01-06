@@ -1,8 +1,17 @@
 const User = require('../models/User');
 
+/**
+ * Controller to retrieve the user's profile data.
+ * 
+ * @params {Object} req - The request object containing user information (user ID in req.user).
+ * @params {Object} res - The response object to send the response back to the client.
+ * 
+ * @returns {Object} JSON response with user profile data or error messages.
+ */
 const profileController = async(req, res) => {
     try {
         const userId = req.user.id;
+
         if (!userId) {
             return res.status(400).json({
                 status: "fail",
