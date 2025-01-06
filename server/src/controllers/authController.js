@@ -1,7 +1,8 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const validation = require('express-validator')
+const validation = require('express-validator');
+const { createToken } = require('../utils/jwtHelper');
 const registerController = async(req, res) => {
     const errors = validation.validationResult(req)
     if (!errors.isEmpty()) {
@@ -31,7 +32,7 @@ const registerController = async(req, res) => {
         password: hashedPassword
     })
     await user.save()
-    token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+    token = await createToken(user)
     return res.status(201).json({
         status: "success",
         data: {
@@ -56,7 +57,7 @@ const loginController = async(req, res) => {
             "data": { "title": "Wrong password" }
         })
     }
-    token = 'Bearer ' + await jwt.sign({ firstName: user.firstName, id: user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+    token = await createToken(user)
     return res.status(200).json({
         status: "success",
         data: {
@@ -66,7 +67,7 @@ const loginController = async(req, res) => {
 }
 
 const googleAuth = async(req, res) => {
-    token = 'Bearer ' + await jwt.sign({ firstName: req.user.firstName, id: req.user.id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+    token = await createToken(req.user)
     return res.status(200).json({
         status: "success",
         data: {
