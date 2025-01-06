@@ -14,8 +14,9 @@ const getJobs = async(req, res) => {
         return res.status(200).json({
             status: "success",
             data: {
+                totalNum: jobs.length,
                 jobs
-            }
+            },
         });
     } catch (error) {
         console.error(error);
@@ -44,8 +45,9 @@ const searchJobsController = async(req, res) => {
         return res.status(200).json({
             status: "success",
             data: {
+                totalNum: jobs.length,
                 jobs
-            }
+            },
         });
     } catch (error) {
         console.error(error);
