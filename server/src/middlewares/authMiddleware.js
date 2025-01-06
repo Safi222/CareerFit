@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require('../models/User');
-
+const { verifyToken } = require('../utils/jwtHelper')
 const authorizationVerfication = async(req, res, next) => {
     const authHeader = req.get("Authorization") || req.get("authorization")
     if (!authHeader) {
@@ -21,7 +21,7 @@ const authorizationVerfication = async(req, res, next) => {
         })
     }
     try {
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
+        const decodedToken = await verifyToken(token)
         const user = await User.findOne({ _id: decodedToken.id });
         if (!user) {
             return res.status(401).json({
