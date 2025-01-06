@@ -32,6 +32,7 @@ const fetchJobs = async (query, page = 1, num_pages = 1) => {
         if (response.data && response.data.data) {
             // Extract necessary fields
             const filteredJobs = response.data.data.map(job => ({
+                job_id: job.job_id,
                 job_title: job.job_title,
                 employer_name: job.employer_name,
                 employer_logo: job.employer_logo,
@@ -93,6 +94,7 @@ const searchJobs = async (query, page = 1, num_pages = 1) => {
 
         if (response.data && response.data.data) {
             const filteredJobs = response.data.data.map(job => ({
+                job_id: job.job_id,
                 job_title: job.job_title,
                 employer_name: job.employer_name,
                 employer_logo: job.employer_logo,
