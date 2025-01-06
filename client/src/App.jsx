@@ -1,5 +1,4 @@
 import Navbar from "./components/Navbar/Navbar";
-import Search from "./components/SearchD/Search";
 import Jobs from "./components/JobsD/Jobs";
 import Value from "./components/ValueD/Value";
 import Footer from "./components/FooterD/Footer";
@@ -47,8 +46,7 @@ const App = () => {
             <div className="w-[85%] m-auto bg-white">
               <Navbar />
               <Slogan />
-              <Search />
-              <Jobs />
+              <Jobs fromHome={true} />
               <PreCvPilot />
               <Value />
               <Footer />
@@ -60,7 +58,6 @@ const App = () => {
           element={
             <div className="w-[85%] m-auto bg-white">
               <Navbar />
-              <Search />
               <Jobs />
               <PreCvPilot />
               <Footer />
