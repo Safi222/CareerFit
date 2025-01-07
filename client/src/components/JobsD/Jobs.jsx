@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { BiTimeFive } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Jobs.css";
 import SearchData from "../SearchD/searchData";
 import Search from "../SearchD/Search";
@@ -10,6 +10,7 @@ const Jobs = (props) => {
   const [jobs, setJobs] = useState([]);
   const [counter, setCounter] = useState(1);
   const [searchData, setSearchData] = useState(new SearchData());
+  const isInitialMount = useRef(true);
 
   const getJobsHome = (AddMore = false) => {
     fetch(`${serverUri}/jobs/home?page=${counter}&num_pages=1`)
@@ -39,18 +40,18 @@ const Jobs = (props) => {
       .catch((err) => console.log(err));
   };
 
-  const getMoreJobs = () => {
+  const getMoreJobs = async () => {
     setCounter(counter + 1);
-    getJobs(true);
   };
 
   useEffect(() => {
     if (props?.fromHome) {
-      getJobsHome();
+      getJobsHome(!isInitialMount.current);
     } else {
-      getJobs();
+      getJobs(!isInitialMount.current);
     }
-  }, []);
+    isInitialMount.current = false;
+  }, [counter]);
 
   const handleSearchData = (searchData) => {
     setCounter(1);

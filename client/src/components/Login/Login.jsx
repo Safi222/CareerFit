@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import google_icon from "../../Assets/google_icon.png";
+import { AuthContext } from "../../AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { fetchUserProfile } = useContext(AuthContext);
 
   const serverUri = import.meta.env.VITE_SERVER_URI;
 
@@ -28,13 +30,12 @@ const Login = () => {
 
       const data = await response.json();
       if (data.status == "fail") {
-        setError(data.data.msg);
-        throw new Error(data.data.msg);
+        setError(data.data.title);
+        throw new Error(data.data.title);
       } else {
         localStorage.setItem("token", data.data.token); // Save token to localStorage
-
-        navigate("/dashboard");
-        console.log("Token saved:", data.data.token);
+        await fetchUserProfile();
+        navigate("/profile");
       }
     } catch (error) {
       console.log("Error:", error);
@@ -48,7 +49,7 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Sign in</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
@@ -89,7 +90,7 @@ const Login = () => {
             type="submit"
             className="w-full bg-orange-500 text-white p-2 rounded-md hover:bg-orange-600 transition duration-200"
           >
-            Login
+            Sign in
           </button>
         </form>
         <div className="mt-4 text-center">
@@ -98,7 +99,7 @@ const Login = () => {
             className="w-full flex items-center justify-center bg-greyIsh text-black p-2 rounded-md hover:bg-gray-300 transition duration-200"
           >
             <img src={google_icon} alt="google" className="h-5 w-5 mr-2" />
-            Login with Google
+            Sign in with Google
           </button>
         </div>
       </div>

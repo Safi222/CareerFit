@@ -1,9 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthContext";
+import { useContext } from "react";
 
-const Dashboard = (props) => {
+const Profile = (props) => {
   const navigate = useNavigate();
-  const user = props.user;
+  const { user, logout } = useContext(AuthContext);
+
+  // const user = props.user;
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -11,7 +15,7 @@ const Dashboard = (props) => {
           <h2 className="text-2xl font-bold mb-4">User Not Found</h2>
           <button
             className="bg-orange-500 text-white p-2 rounded-md hover:bg-orange-600 transition duration-200"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/login")}
           >
             Go Back to Login
           </button>
@@ -25,33 +29,29 @@ const Dashboard = (props) => {
       <header className="bg-white shadow-md p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Welcome, {user.firstName}</h1>
         <button
-          onClick={() => navigate("/")}
+          onClick={logout}
           className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition duration-200"
         >
-          Logout
+          Sign out
         </button>
       </header>
 
       <main className="mt-6">
         <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+          <h2 className="text-2xl font-bold mb-4">Profile</h2>
           <p className="text-gray-700 mb-2">
-            <strong>Name:</strong> {user.firstName}
+            <strong>Name:</strong> {user.firstName} {user.lastName}
           </p>
           <p className="text-gray-700 mb-2">
             <strong>Email:</strong> {user.email}
           </p>
-          <p className="text-gray-700">
+          {/* <p className="text-gray-700">
             <strong>Role:</strong> {user.role}
-          </p>
+          </p> */}
         </div>
       </main>
-
-      <footer className="mt-10 text-center text-gray-500">
-        <p>&copy; 2024 CareerFit Platform. All rights reserved.</p>
-      </footer>
     </div>
   );
 };
 
-export default Dashboard;
+export default Profile;

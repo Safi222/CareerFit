@@ -26,6 +26,12 @@ li:hover::before{
   color: #F57922;
 }
 
+.menuList a.active{
+  background: #F57922;
+  color: #FFF;
+  border-radius: 0.5rem;
+}
+
 icon{
   cursor: pointer;
 }

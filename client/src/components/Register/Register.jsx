@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthContext";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -6,8 +8,9 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const { fetchUserProfile } = useContext(AuthContext);
   const serverUri = import.meta.env.VITE_SERVER_URI;
+  const naviagte = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,11 +25,12 @@ const Register = () => {
 
       const data = await response.json();
       if (data.status === "fail") {
-        setError(data.data.msg);
-        throw new Error(data.data.msg);
+        setError(data.data.title);
+        throw new Error(data.data.title);
       } else {
         localStorage.setItem("token", data.data.token); // Save token to localStorage
-        console.log("Token saved:", data.data.token);
+        await fetchUserProfile();
+        naviagte("/profile");
       }
     } catch (error) {
       console.log("Error:", error);

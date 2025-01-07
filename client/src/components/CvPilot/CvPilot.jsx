@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import { GiUpgrade } from "react-icons/gi";
 import { MdAssessment } from "react-icons/md";
 import { MdRecommend } from "react-icons/md";
 import { MdPrivacyTip } from "react-icons/md";
 import Cvpilot from "../../Assets/Cvpilot.png";
 import { useState } from "react";
+
 const FeaturesData = [
   {
     id: 1,
@@ -33,21 +33,75 @@ const FeaturesData = [
 ];
 
 const CVPilot = () => {
+  const serverUri = import.meta.env.VITE_SERVER_URI;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const [cvFile, SetCvFile] = useState("");
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("token");
 
-  const handleAnalyzeClick = () => {
-    if (isLoggedIn) {
-      setIsModalOpen(true);
+  const handleAnalyzeClick = async () => {
+    if (!cvFile) {
+      setError("Please upload a CV file.");
+      return;
     } else {
-      alert("You need to log in to use this feature!");
-      navigate("/login");
+      try {
+        const formData = new FormData();
+        formData.append("cv", cvFile); // "cv" is the key expected by the API
+
+        const res = await fetch(`${serverUri}/cv/analyze`, {
+          method: "GET", // Change to POST if required
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error(`API request failed with status ${res.status}`);
+        }
+
+        const data = await res.json();
+        setError(null);
+        console.log(data);
+        setIsModalOpen(true);
+      } catch (err) {
+        console.log(err);
+      }
     }
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleFileChange = async (event) => {
+    console.log(event.target.files[0]);
+    SetCvFile(event.target.files[0]);
+    if (!cvFile) {
+      setError("Please upload a CV file.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("cv", cvFile); // "cv" is the key expected by the API
+
+      const res = await fetch(`${serverUri}/users/cv`, {
+        method: "POST", // Change to POST if required
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      setError(null);
+      console.log(data);
+      setIsModalOpen(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -87,7 +141,13 @@ const CVPilot = () => {
       </div>
 
       <div className="mt-10 text-center">
-        <input type="file" id="cv-upload" className="block mx-auto mb-4" />
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFileChange}
+          id="cv-upload"
+          className="block mx-auto mb-4"
+        />
         <button
           onClick={handleAnalyzeClick}
           className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
@@ -103,7 +163,7 @@ const CVPilot = () => {
               CV Analysis Results
             </h2>
             <p className="text-gray-600 mb-2">
-              Your CV scored{" "}
+              Your CV scored
               <span className="font-bold text-green-600">85/100</span> points.
             </p>
             <p className="text-gray-600 mb-6">
