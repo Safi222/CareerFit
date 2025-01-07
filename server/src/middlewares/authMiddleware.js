@@ -45,7 +45,7 @@ const authorizationVerfication = async(req, res, next) => {
         };
         next();
     } catch {
-        return res.status(402).json({
+        return res.status(401).json({
             status: "fail",
             data: {
                 title: "Unauthorized"
