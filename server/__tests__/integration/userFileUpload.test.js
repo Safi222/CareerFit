@@ -19,7 +19,7 @@ app.use(express.json());
 
 // Configure test routes
 app.post('/api/users/profile-picture', 
-//   authorizationVerfication,
+  authorizationVerfication,
   uploadPic.single('profilePic'),
   detectMiddleware,
   async (req, res) => {
@@ -54,7 +54,7 @@ app.post('/api/users/profile-picture',
 );
 
 app.post('/api/users/cv',
-//   authorizationVerfication,
+  authorizationVerfication,
   uploadcv.single('cvFile'),
   detectMiddleware,
   async (req, res) => {
@@ -171,15 +171,15 @@ describe('User File Upload Endpoints', () => {
       expect(response.body.data.title).toBe('No file uploaded');
     });
 
-    // it('should return 400 when no auth token is provided', async () => {
-    //   const response = await request(app)
-    //     .post('/api/users/profile-picture')
-    //     .attach('profilePic', testImagePath);
+    it('should return 400 when no auth token is provided', async () => {
+      const response = await request(app)
+        .post('/api/users/profile-picture')
+        .attach('profilePic', testImagePath);
 
-    //   expect(response.status).toBe(400);
-    //   expect(response.body.status).toBe('fail');
-    //   expect(response.body.data.title).toBe('Missing Authorization Header');
-    // });
+      expect(response.status).toBe(400);
+      expect(response.body.status).toBe('fail');
+      expect(response.body.data.title).toBe('Missing Authorization Header');
+    });
   });
 
   describe('POST /users/cv', () => {
@@ -211,14 +211,14 @@ describe('User File Upload Endpoints', () => {
       expect(response.body.data.title).toBe('No file uploaded');
     });
 
-    // it('should return 400 when no auth token is provided', async () => {
-    //   const response = await request(app)
-    //     .post('/api/users/cv')
-    //     .attach('cvFile', testPdfPath);
+    it('should return 400 when no auth token is provided', async () => {
+      const response = await request(app)
+        .post('/api/users/cv')
+        .attach('cvFile', testPdfPath);
 
-    //   expect(response.status).toBe(400);
-    //   expect(response.body.status).toBe('fail');
-    //   expect(response.body.data.title).toBe('Missing Authorization Header');
-    // });
+      expect(response.status).toBe(400);
+      expect(response.body.status).toBe('fail');
+      expect(response.body.data.title).toBe('Missing Authorization Header');
+    });
   });
 });
