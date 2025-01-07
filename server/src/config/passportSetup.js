@@ -13,7 +13,8 @@ passport.use(new GoogleStrategy({
                 firstName: profile.name.givenName,
                 lastName: profile.name.familyName,
                 googleId: profile.id,
-                profilePic: profile.photos[0].value
+                profilePic: profile.photos[0].value,
+                authType: "google"
             })
             await newUser.save()
             return cb(null, newUser)

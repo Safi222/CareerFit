@@ -1,132 +1,136 @@
+/* eslint-disable react/prop-types */
 import { BiTimeFive } from "react-icons/bi";
-import { Link } from "react-router-dom";  // Import Link for navigation
-import logo1 from "../../Assets/logo1.png";
-import logo2 from "../../Assets/logo2.png";
-import logo3 from "../../Assets/logo3.png";
+import { useEffect, useState } from "react";
+import "./Jobs.css";
+import SearchData from "../SearchD/searchData";
+import Search from "../SearchD/Search";
 
-const Data = [
-  {
-    id: 1,
-    image: logo1,
-    title: "Graphic Designer",
-    time: "Now",
-    location: "Haiti",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Vertex Solutions Co.",
-  },
-  {
-    id: 2,
-    image: logo2,
-    title: "Business Analyst",
-    time: "3Hrs",
-    location: "US",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Merci Co.",
-  },
-  {
-    id: 3,
-    image: logo3,
-    title: "Backend Developer",
-    time: "20Hrs",
-    location: "Austria",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Noka Tech Co.",
-  },
-  {
-    id: 4,
-    image: logo3,
-    title: "Backend Developer",
-    time: "20Hrs",
-    location: "Austria",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Noka Tech Co.",
-  },
-  {
-    id: 5,
-    image: logo3,
-    title: "Backend Developer",
-    time: "20Hrs",
-    location: "Austria",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Noka Tech Co.",
-  },
-  {
-    id: 6,
-    image: logo3,
-    title: "Backend Developer",
-    time: "20Hrs",
-    location: "Austria",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Noka Tech Co.",
-  }, {
-    id: 7,
-    image: logo1,
-    title: "Graphic Designer",
-    time: "Now",
-    location: "Haiti",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Vertex Solutions Co.",
-  }, {
-    id: 8,
-    image: logo1,
-    title: "Graphic Designer",
-    time: "Now",
-    location: "Haiti",
-    desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corrupti, laboriosam!",
-    company: "Vertex Solutions Co.",
-  },
-];
+const Jobs = (props) => {
+  const serverUri = import.meta.env.VITE_SERVER_URI;
+  const [jobs, setJobs] = useState([]);
+  const [counter, setCounter] = useState(1);
+  const [searchData, setSearchData] = useState(new SearchData());
 
-const Jobs = () => {
+  const getJobsHome = (AddMore = false) => {
+    fetch(`${serverUri}/jobs/home?page=${counter}&num_pages=1`)
+      .then((res) => res.json())
+      .then((d) => {
+        if (AddMore) {
+          setJobs([...jobs, ...d.data.jobs]);
+        } else {
+          setJobs([...d.data.jobs]);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getJobs = (AddMore = false) => {
+    fetch(
+      `${serverUri}/jobs/search?title=${searchData.title}&company=${searchData.company}&location=${searchData.location}&type=${searchData.type}&level=${searchData.level}&page=${counter}&num_pages=1`
+    )
+      .then((res) => res.json())
+      .then((d) => {
+        if (AddMore) {
+          setJobs([...jobs, ...d.data.jobs]);
+        } else {
+          setJobs([...d.data.jobs]);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getMoreJobs = () => {
+    setCounter(counter + 1);
+    getJobs(true);
+  };
+
+  useEffect(() => {
+    if (props?.fromHome) {
+      getJobsHome();
+    } else {
+      getJobs();
+    }
+  }, []);
+
+  const handleSearchData = (searchData) => {
+    setCounter(1);
+    setSearchData(searchData);
+    getJobs();
+  };
+
   return (
-    <div className="container mx-auto px-4">
-      <div className="jobContainer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
-        {Data.map(({ id, image, title, time, location, desc, company }) => {
-          return (
-            <div
-              key={id}
-              className="group singleJob p-4 bg-white rounded-lg shadow-lg hover:bg-orange-500 transition duration-300"
-            >
-              <span className="flex justify-between items-center gap-4">
-                <h1 className="text-lg font-semibold text-gray-800 group-hover:text-white">
-                  {title}
-                </h1>
-                <span className="flex items-center text-gray-400 gap-1">
-                  <BiTimeFive />
-                  {time}
-                </span>
-              </span>
+    <>
+      <Search sendSearchData={handleSearchData} />
+      <div className="container mx-auto px-4">
+        <div className="jobContainer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
+          {jobs.map(
+            ({
+              job_id,
+              employer_logo,
+              job_title,
+              job_posted_at,
+              job_country,
+              job_description,
+              job_apply_link,
+              job_employment_type,
+            }) => {
+              return (
+                <div
+                  key={job_id}
+                  className="group singleJob p-4 flex-col flex bg-white rounded-lg shadow-lg hover:bg-orange-500 transition duration-300"
+                >
+                  <h2 className="text-lg font-semibold text-gray-800 group-hover:text-white mb-4">
+                    {job_title}
+                  </h2>
+                  <div className="flex justify-between items-center gap-4">
+                    <h6 className="text-gray-800">{job_country}</h6>
+                    <span className="flex items-center text-gray-400 gap-1">
+                      <BiTimeFive />
+                      {job_posted_at}
+                    </span>
+                  </div>
 
-              <h6 className="text-gray-500">{location}</h6>
+                  <p
+                    title={job_description}
+                    className="text-sm text-gray-600 mb-3 pt-4 border-t mt-4 group-hover:text-white truncated-text"
+                  >
+                    {job_description}
+                  </p>
 
-              <p className="text-sm text-gray-600 pt-4 border-t mt-4 group-hover:text-white">
-                {desc}
-              </p>
+                  <div className="company mt-auto flex items-center gap-2 mt-4">
+                    <img
+                      src={employer_logo}
+                      alt={`${job_country} logo`}
+                      className="w-12 h-12 object-cover"
+                    />
+                    <span className="text-md py-2 block group-hover:text-white">
+                      {job_employment_type}
+                    </span>
+                  </div>
+                  <a
+                    href={job_apply_link}
+                    target="_blank"
+                    className="border-2 mt-2 rounded-lg block p-2 w-full text-md font-semibold text-gray-800 hover:bg-white group-hover:text-white group-hover:bg-orange-500 transition duration-300"
+                  >
+                    Apply Now
+                  </a>
+                </div>
+              );
+            }
+          )}
+        </div>
 
-              <div className="company flex items-center gap-2 mt-4">
-                <img src={image} alt={`${company} logo`} className="w-12 h-12 object-cover" />
-                <span className="text-md py-2 block group-hover:text-white">
-                  {company}
-                </span>
-              </div>
-
-              <button className="border-2 rounded-lg block p-2 w-full text-md font-semibold text-gray-800 hover:bg-white group-hover:text-gray-800 group-hover:bg-orange-500 transition duration-300">
-                Fit in Now
-              </button>
-            </div>
-          );
-        })}
-      </div>
-      
-      {/* Add the View More Fits button with Link */}
-      <div className="text-center mt-6">
-        <Link to="/jobs"> 
-          <button className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition">
+        {/* Add the View More Fits button with Link */}
+        <div className="text-center mt-6">
+          <button
+            onClick={getMoreJobs}
+            className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
+          >
             View More Fits
           </button>
-        </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

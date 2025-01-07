@@ -3,30 +3,53 @@ const deletePdf = require('../utils/deletePdf')
 const chatBot = require('../utils/chatbot')
 const pdfParser = require('../utils/pdfParser')
 
-
+/**
+ * Get recommended titles for a user based on their CV.
+ * 
+ * @params {Object} req - The request object containing user information (user ID).
+ * @params {Object} res - The response object to send the response back to the client.
+ * 
+ * @returns {Object} JSON response with status and data (recommendation or error message).
+ */
 const recommendedTitles = async(req, res) => {
-    const id = req.user.id;
-    const filePath = await downloadPdf(id)
-    if (!filePath) {
-        if (filePath === null)
-            return res.status(404).json({
-                status: "fail",
-                "data": "cv not found"
-            })
-        else {
-            return res.status(404).json({
-                status: "fail",
-                "data": "error while preparing your cv"
-            })
+    try {
+        const id = req.user.id;
+        const filePath = await downloadPdf(id)
+
+        if (!filePath) {
+            if (filePath === null)
+                return res.status(404).json({
+                    status: "fail",
+                    "data": {
+                        title: "cv not found"
+                    }
+                })
+            else {
+                return res.status(404).json({
+                    status: "fail",
+                    "data": {
+                        title: "error while preparing your cv"
+                    }
+                })
+            }
         }
+
+        const content = await pdfParser(filePath)
+        deletePdf(filePath)
+        const recommendation = await chatBot(content)
+
+        return res.status(200).json({
+            status: "success",
+            "data": { recommendation }
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: "error",
+            data: {
+                title: "internal server error"
+            }
+        })
     }
-    const content = await pdfParser(filePath)
-    deletePdf(filePath)
-    const recommendation = await chatBot(content)
-    return res.status(200).json({
-        status: "success",
-        "data": recommendation
-    })
 }
 
 module.exports = recommendedTitles;

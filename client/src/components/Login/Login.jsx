@@ -32,8 +32,8 @@ const Login = () => {
         throw new Error(data.data.msg);
       } else {
         localStorage.setItem("token", data.data.token); // Save token to localStorage
-        
-        navigate('/dashboard');
+
+        navigate("/dashboard");
         console.log("Token saved:", data.data.token);
       }
     } catch (error) {

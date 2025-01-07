@@ -4,7 +4,7 @@ import { MdAssessment } from "react-icons/md";
 import { MdRecommend } from "react-icons/md";
 import { MdPrivacyTip } from "react-icons/md";
 import Cvpilot from "../../Assets/Cvpilot.png";
-
+import { useState } from "react";
 const FeaturesData = [
   {
     id: 1,
@@ -34,14 +34,14 @@ const FeaturesData = [
 
 const CVPilot = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   const handleAnalyzeClick = () => {
     if (isLoggedIn) {
       setIsModalOpen(true);
     } else {
-      alert("You need to log in to use this feature!"); 
+      alert("You need to log in to use this feature!");
       navigate("/login");
     }
   };
@@ -53,7 +53,6 @@ const CVPilot = () => {
   return (
     <div className="container mx-auto px-6 py-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        
         {/* Right Components */}
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-6">
@@ -97,7 +96,6 @@ const CVPilot = () => {
         </button>
       </div>
 
-
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg text-center gap-3">
@@ -105,10 +103,12 @@ const CVPilot = () => {
               CV Analysis Results
             </h2>
             <p className="text-gray-600 mb-2">
-              Your CV scored <span className="font-bold text-green-600">85/100</span> points.
+              Your CV scored{" "}
+              <span className="font-bold text-green-600">85/100</span> points.
             </p>
             <p className="text-gray-600 mb-6">
-              Recommended jobs: Software Engineer, Data Scientist, Product Manager.
+              Recommended jobs: Software Engineer, Data Scientist, Product
+              Manager.
             </p>
             <button
               onClick={closeModal}
