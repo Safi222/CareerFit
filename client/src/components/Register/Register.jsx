@@ -1,8 +1,12 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
+import google_icon from "../../Assets/google_icon.png";
 
 const Register = () => {
+  const [searchParams] = useSearchParams();
+  const tokenParam = searchParams.get("token");
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,6 +43,19 @@ const Register = () => {
     // Log the input values to the console instead of sending them
     console.log("Entered data:", { firstName, lastName, email, password });
   };
+
+  const handleGoogleRegister = async () => {
+    window.location.href = `${serverUri}/auth/google`;
+  };
+
+  useEffect(() => {
+    if (tokenParam) {
+      localStorage.setItem("token", tokenParam);
+      fetchUserProfile().then(() => {
+        navigate("/profile");
+      });
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -111,6 +128,17 @@ const Register = () => {
         >
           Create Account
         </button>
+
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={handleGoogleRegister}
+            className="w-full flex items-center justify-center bg-greyIsh text-black p-2 rounded-md hover:bg-gray-300 transition duration-200"
+          >
+            <img src={google_icon} alt="google" className="h-5 w-5 mr-2" />
+            Sign Up with Google
+          </button>
+        </div>
       </form>
     </div>
   );
