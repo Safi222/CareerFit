@@ -37,7 +37,8 @@ const profileController = async(req, res) => {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                profilePic: user.profilePic
+                profilePic: user.profilePic,
+                cvFile: user.cvFile
             }
         });
     } catch (error) {
