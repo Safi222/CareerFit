@@ -117,7 +117,8 @@ const loginController = async (req, res) => {
 const googleAuth = async (req, res) => {
   try {
     const token = await createToken(req.user);
-    return res.redirect(`http://localhost:5173/login?${token}`);
+    const frontendURL = process.env.FRONTEND_URL
+    return res.redirect(`${frontendURL}/login?token=${token}`);
     // json({
     //     status: "success",
     //     data: {
