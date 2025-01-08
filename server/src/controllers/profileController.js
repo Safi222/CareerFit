@@ -21,7 +21,7 @@ const profileController = async(req, res) => {
             });
         }
 
-        const user = await User.findById(userId, 'firstName lastName email profilePic');
+        const user = await User.findById(userId, 'firstName lastName email profilePic cvFile');
         if (!user) {
             return res.status(404).json({
                 status: "fail",
@@ -31,6 +31,7 @@ const profileController = async(req, res) => {
             });
         }
 
+        console.log("cvFile", user.cvFile)
         return res.status(200).json({
             status: "success",
             data: {
