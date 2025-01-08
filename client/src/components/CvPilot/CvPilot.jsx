@@ -40,55 +40,12 @@ const CVPilot = () => {
   const token = localStorage.getItem("token");
 
   const handleAnalyzeClick = async () => {
-    if (!cvFile) {
-      setError("Please upload a CV file.");
-      return;
-    } else {
-      try {
-        const formData = new FormData();
-        formData.append("cv", cvFile); // "cv" is the key expected by the API
-
-        const res = await fetch(`${serverUri}/cv/analyze`, {
-          method: "GET", // Change to POST if required
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(`API request failed with status ${res.status}`);
-        }
-
-        const data = await res.json();
-        setError(null);
-        console.log(data);
-        setIsModalOpen(true);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleFileChange = async (event) => {
-    console.log(event.target.files[0]);
-    SetCvFile(event.target.files[0]);
-    if (!cvFile) {
-      setError("Please upload a CV file.");
-      return;
-    }
-
     try {
-      const formData = new FormData();
-      formData.append("cv", cvFile); // "cv" is the key expected by the API
-
-      const res = await fetch(`${serverUri}/users/cv`, {
-        method: "POST", // Change to POST if required
-        body: formData,
+      const res = await fetch(`${serverUri}/cv/analyze`, {
+        method: "GET", // Change to POST if required
+        headers: {
+          Authorization: `${token}`,
+        },
       });
 
       if (!res.ok) {
@@ -102,6 +59,10 @@ const CVPilot = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -141,13 +102,6 @@ const CVPilot = () => {
       </div>
 
       <div className="mt-10 text-center">
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-          id="cv-upload"
-          className="block mx-auto mb-4"
-        />
         <button
           onClick={handleAnalyzeClick}
           className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"

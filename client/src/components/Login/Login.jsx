@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import google_icon from "../../Assets/google_icon.png";
 import { AuthContext } from "../../AuthContext";
@@ -42,9 +42,13 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     window.location.href = `${serverUri}/auth/google`;
   };
+
+  useEffect(() => {
+    // if()
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">

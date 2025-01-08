@@ -1,11 +1,44 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const Profile = (props) => {
+  const serverUri = import.meta.env.VITE_SERVER_URI;
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
+  const [cvFile, SetCvFile] = useState("");
+  const [error, setError] = useState("");
+
+  const handleFileChange = async (event) => {
+    console.log(event.target.files[0]);
+    SetCvFile(event.target.files[0]);
+  };
+
+  const submitCv = async () => {
+    if (!cvFile) {
+      setError("Please upload a CV file.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("cvFile", cvFile); // "cv" is the key expected by the API
+
+      const res = await fetch(`${serverUri}/users/cv`, {
+        method: "POST", // Change to POST if required
+        body: formData,
+      });
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+      const data = await res.json();
+      console.log(data);
+      setError("");
+    } catch (err) {
+      setError("Please upload a CV file.");
+    }
+  };
 
   // const user = props.user;
   if (!user) {
@@ -48,6 +81,27 @@ const Profile = (props) => {
           {/* <p className="text-gray-700">
             <strong>Role:</strong> {user.role}
           </p> */}
+        </div>
+
+        <div className="flex flex-col items-center justify-center p-4">
+          <div>
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileChange}
+              id="cv-upload"
+              className="block mx-auto mb-4"
+            />
+          </div>
+
+          <span>{error}</span>
+
+          <button
+            onClick={submitCv}
+            className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
+          >
+            Submit CV
+          </button>
         </div>
       </main>
     </div>
