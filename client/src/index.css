@@ -3,39 +3,59 @@
 @tailwind utilities;
 
 :root {
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
 body {
-  background : white
+  background: white;
 }
 
-li{
+li {
   list-style: none;
   cursor: pointer;
   position: relative;
 }
 
-li:hover::before{
+li:hover::before {
   position: absolute;
-  content: '';
+  content: "";
   height: 4px;
   width: 100x;
-  background: #F57922;
-  right : 0;
-  color: #F57922;
+  background: #f57922;
+  right: 0;
+  color: #f57922;
 }
 
-.menuList a.active{
-  background: #F57922;
-  color: #FFF;
+.menuList a.active {
+  background: #f57922;
+  color: #fff;
   border-radius: 0.5rem;
 }
+.z-1 {
+  z-index: 1;
+}
+icon {
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+}
 
-icon{
+a.orange {
+  color: #f57922;
+  text-decoration: underline;
   cursor: pointer;
 }
 
-card{
+.custom-profile-pic {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: block;
+  max-width: 80%;
+  object-fit: contain;
+}
+
+card {
   background: url(/src/Assets/testimonial-bg.png);
 }

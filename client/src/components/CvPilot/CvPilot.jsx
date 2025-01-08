@@ -4,6 +4,8 @@ import { MdRecommend } from "react-icons/md";
 import { MdPrivacyTip } from "react-icons/md";
 import Cvpilot from "../../Assets/Cvpilot.png";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Loader from "../Loader/Loader";
 
 const FeaturesData = [
   {
@@ -35,11 +37,14 @@ const FeaturesData = [
 const CVPilot = () => {
   const serverUri = import.meta.env.VITE_SERVER_URI;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cvFile, SetCvFile] = useState("");
   const [error, setError] = useState(null);
+  const [jobsRecommendtions, setJobsRecommendtions] = useState([]);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAnalyzeClick = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(`${serverUri}/cv/analyze`, {
         method: "GET", // Change to POST if required
@@ -53,16 +58,23 @@ const CVPilot = () => {
       }
 
       const data = await res.json();
+      setJobsRecommendtions(data.data.recommendation.recommendations);
       setError(null);
       console.log(data);
       setIsModalOpen(true);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const navigateToJobs = (job) => {
+    navigate(`/jobs?job_title=${job.job_title}&level=${job.level}`);
   };
 
   return (
@@ -102,31 +114,53 @@ const CVPilot = () => {
       </div>
 
       <div className="mt-10 text-center">
+        {error ? <div>error</div> : ""}
         <button
+          disabled={isLoading}
           onClick={handleAnalyzeClick}
-          className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
+          className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition flex justify-center items-center gap-3 mx-auto"
         >
-          Analyze Your CV 🤖
+          Analyze Your CV 🤖 {isLoading ? <Loader /> : ""}
         </button>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-1">
           <div className="bg-white p-6 rounded-lg text-center gap-3">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               CV Analysis Results
             </h2>
-            <p className="text-gray-600 mb-2">
-              Your CV scored
-              <span className="font-bold text-green-600">85/100</span> points.
-            </p>
-            <p className="text-gray-600 mb-6">
-              Recommended jobs: Software Engineer, Data Scientist, Product
-              Manager.
-            </p>
+            <div>
+              <table className="min-w-full bg-white border border-gray-200">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="text-left px-4 py-2 border-b">Title</th>
+                    <th className="text-left px-4 py-2 border-b">Level</th>
+                    <th className="text-left px-4 py-2 border-b">Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jobsRecommendtions.map((job) => (
+                    <tr
+                      key={job.id}
+                      className="hover:bg-gray-100 cursor-pointer"
+                      onClick={() => {
+                        navigateToJobs(job);
+                      }}
+                    >
+                      <td className="px-4 py-2 border-b">{job.job_title}</td>
+                      <td className="px-4 py-2 border-b">{job.level}</td>
+                      <td className="px-4 py-2 border-b">
+                        {(job.relevance_score * 100).toFixed()}%
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <button
               onClick={closeModal}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              className="bg-red-500 mt-4 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
             >
               Close
             </button>

@@ -2,13 +2,16 @@
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import { useContext, useState } from "react";
+import Loader from "../Loader/Loader";
+import DefaultAvatar from "../../Assets/default-avatar.jpg";
 
-const Profile = (props) => {
+const Profile = () => {
   const serverUri = import.meta.env.VITE_SERVER_URI;
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
   const [cvFile, SetCvFile] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFileChange = async (event) => {
     console.log(event.target.files[0]);
@@ -23,24 +26,31 @@ const Profile = (props) => {
 
     try {
       const formData = new FormData();
+      const token = localStorage.getItem("token");
       formData.append("cvFile", cvFile); // "cv" is the key expected by the API
+      setIsLoading(true);
 
       const res = await fetch(`${serverUri}/users/cv`, {
         method: "POST", // Change to POST if required
+        headers: {
+          Authorization: `${token}`,
+        },
         body: formData,
       });
       if (!res.ok) {
         throw new Error(`API request failed with status ${res.status}`);
       }
       const data = await res.json();
-      console.log(data);
+      user.cvFile = data.data.cvFile;
       setError("");
+      SetCvFile(null);
+      setIsLoading(false);
     } catch (err) {
       setError("Please upload a CV file.");
+      setIsLoading(false);
     }
   };
 
-  // const user = props.user;
   if (!user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
@@ -70,21 +80,51 @@ const Profile = (props) => {
       </header>
 
       <main className="mt-6">
-        <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Profile</h2>
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl font-bold mb-10">Profile</h2>
+          <div className="flex justify-center items-center w-full mb-8">
+            {user.profilePic ? (
+              <img
+                className="custom-profile-pic"
+                src={user.profilePic}
+                alt="profile picture"
+              />
+            ) : (
+              <img
+                className="custom-profile-pic"
+                src={DefaultAvatar}
+                alt="profile picture"
+              />
+            )}
+          </div>
           <p className="text-gray-700 mb-2">
-            <strong>Name:</strong> {user.firstName} {user.lastName}
+            <strong>
+              {user.firstName} {user.lastName}
+            </strong>
           </p>
-          <p className="text-gray-700 mb-2">
-            <strong>Email:</strong> {user.email}
-          </p>
-          {/* <p className="text-gray-700">
-            <strong>Role:</strong> {user.role}
-          </p> */}
+          {user.email ? (
+            <p className="text-gray-700 mb-2">
+              <strong>{user.email}</strong>
+            </p>
+          ) : (
+            ""
+          )}
         </div>
 
         <div className="flex flex-col items-center justify-center p-4">
-          <div>
+          <div className="text-center">
+            {user.cvFile ? (
+              <a
+                className="block mx-auto mb-4 orange"
+                href={user.cvFile}
+                target="_blank"
+              >
+                View your CV
+              </a>
+            ) : (
+              ""
+            )}
+            <h3 className="mb-5 h3">Upload Your CV</h3>
             <input
               type="file"
               accept=".pdf,.doc,.docx"
@@ -97,10 +137,12 @@ const Profile = (props) => {
           <span>{error}</span>
 
           <button
+            disabled={isLoading || !cvFile}
             onClick={submitCv}
-            className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
+            className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition flex justify-center items-center gap-3"
           >
-            Submit CV
+            {user.cvFile ? "Upload new CV" : "Submit CV"}{" "}
+            {isLoading ? <Loader /> : ""}
           </button>
         </div>
       </main>

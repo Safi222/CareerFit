@@ -4,6 +4,7 @@ import { AiOutlineSearch, AiOutlineCloseCircle } from "react-icons/ai";
 import { BsHouseDoor } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 import SearchData from "./searchData";
+import Loader from "../Loader/Loader";
 
 const Search = (props) => {
   // const [sendSearchData] = props;
@@ -94,10 +95,11 @@ const Search = (props) => {
 
           {/* Search Button */}
           <button
+            disabled={props.isLoading}
             type="submit"
-            className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-400 transition-all duration-300 w-full md:w-auto"
+            className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-400 transition-all duration-300 w-full md:w-auto flex justify-center items-center gap-3"
           >
-            Search
+            Search {props.isLoading ? <Loader /> : ""}
           </button>
         </div>
       </form>

@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import google_icon from "../../Assets/google_icon.png";
 import { AuthContext } from "../../AuthContext";
 
 const Login = () => {
+  const [searchParams] = useSearchParams();
+  const tokenParam = searchParams.get("token");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -47,7 +50,12 @@ const Login = () => {
   };
 
   useEffect(() => {
-    // if()
+    if (tokenParam) {
+      localStorage.setItem("token", tokenParam);
+      fetchUserProfile().then(() => {
+        navigate("/profile");
+      });
+    }
   }, []);
 
   return (
