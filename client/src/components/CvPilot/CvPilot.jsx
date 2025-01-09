@@ -131,12 +131,14 @@ const CVPilot = () => {
               CV Analysis Results
             </h2>
             <div>
-              <table className="min-w-full bg-white border border-gray-200">
-                <thead className="bg-gray-200">
+              <table className="min-w-full bg-white border  border-gray-200">
+                <thead className="bg-orange-500 text-center">
                   <tr>
-                    <th className="text-left px-4 py-2 border-b">Title</th>
-                    <th className="text-left px-4 py-2 border-b">Level</th>
-                    <th className="text-left px-4 py-2 border-b">Score</th>
+                    <th className=" px-4 py-2 border-b text-center">
+                      Jop title
+                    </th>
+                    <th className=" px-4 py-2 border-b">Level</th>
+                    <th className=" px-4 py-2 border-b">Score</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,6 +160,7 @@ const CVPilot = () => {
                 </tbody>
               </table>
             </div>
+
             <button
               onClick={closeModal}
               className="bg-red-500 mt-4 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"

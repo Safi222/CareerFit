@@ -159,7 +159,7 @@ const Jobs = (props) => {
               onClick={getMoreJobs}
               className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition flex justify-center items-center gap-3 mx-auto"
             >
-              View More Fits {isLoading ? <Loader /> : ""}
+              View More jobs {isLoading ? <Loader /> : ""}
             </button>
           </div>
         ) : (
