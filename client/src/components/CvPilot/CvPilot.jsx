@@ -39,15 +39,21 @@ const CVPilot = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
   const [jobsRecommendtions, setJobsRecommendtions] = useState([]);
+  const [loginPrompt, setLoginPrompt] = useState(false); // New state for login prompt
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAnalyzeClick = async () => {
+    if (!token) {
+      setLoginPrompt(true);
+      return;
+    }
+
     setIsLoading(true);
     try {
       const res = await fetch(`${serverUri}/cv/analyze`, {
-        method: "GET", // Change to POST if required
+        method: "GET",
         headers: {
           Authorization: `${token}`,
         },
@@ -77,10 +83,14 @@ const CVPilot = () => {
     navigate(`/jobs?job_title=${job.job_title}&level=${job.level}`);
   };
 
+  const handleLoginRedirect = () => {
+    setLoginPrompt(false);
+    navigate("/login");
+  };
+
   return (
     <div className="container mx-auto px-6 py-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Right Components */}
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-6">
             Hello, My name is CvPilot
@@ -90,7 +100,6 @@ const CVPilot = () => {
           </h2>
         </div>
 
-        {/* Left Components */}
         <div className="text-center">
           <img src={Cvpilot} alt="CvPilot" className="w-80 h-auto mx-auto" />
         </div>
@@ -114,31 +123,29 @@ const CVPilot = () => {
       </div>
 
       <div className="mt-10 text-center">
-        {error ? <div>error</div> : ""}
+        {error && <div className="text-red-500 mb-4">{error}</div>}
         <button
           disabled={isLoading}
           onClick={handleAnalyzeClick}
           className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition flex justify-center items-center gap-3 mx-auto"
         >
-          Analyze Your CV 🤖 {isLoading ? <Loader /> : ""}
+          Analyze Your CV 🤖 {isLoading && <Loader />}
         </button>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-1">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
           <div className="bg-white p-6 rounded-lg text-center gap-3">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               CV Analysis Results
             </h2>
             <div>
-              <table className="min-w-full bg-white border  border-gray-200">
+              <table className="min-w-full bg-white border border-gray-200">
                 <thead className="bg-orange-500 text-center">
                   <tr>
-                    <th className=" px-4 py-2 border-b text-center">
-                      Jop title
-                    </th>
-                    <th className=" px-4 py-2 border-b">Level</th>
-                    <th className=" px-4 py-2 border-b">Score</th>
+                    <th className="px-4 py-2 border-b">Job Title</th>
+                    <th className="px-4 py-2 border-b">Level</th>
+                    <th className="px-4 py-2 border-b">Score</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -146,9 +153,7 @@ const CVPilot = () => {
                     <tr
                       key={job.id}
                       className="hover:bg-gray-100 cursor-pointer"
-                      onClick={() => {
-                        navigateToJobs(job);
-                      }}
+                      onClick={() => navigateToJobs(job)}
                     >
                       <td className="px-4 py-2 border-b">{job.job_title}</td>
                       <td className="px-4 py-2 border-b">{job.level}</td>
@@ -166,6 +171,22 @@ const CVPilot = () => {
               className="bg-red-500 mt-4 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
             >
               Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {loginPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
+          <div className="bg-white p-6 rounded-lg text-center">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              You need to log in to analyze your CV.
+            </h2>
+            <button
+              onClick={handleLoginRedirect}
+              className="bg-orange-400 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition"
+            >
+              Go to Sign In
             </button>
           </div>
         </div>

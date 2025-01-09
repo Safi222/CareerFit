@@ -126,7 +126,7 @@ const Jobs = (props) => {
                     {job_description}
                   </p>
 
-                  <div className="company mt-auto flex items-center gap-2 mt-4">
+                  <div className="company mt-auto flex items-center gap-2 ">
                     <img
                       src={employer_logo}
                       alt={`${job_country} logo`}
