@@ -15,7 +15,7 @@ const Navbar = () => {
   const { isLoggedIn, logout } = useContext(AuthContext);
 
   return (
-    <nav className="flex justify-between items-center px-6 py-4 bg-white flex-wrap md:flex-none">
+    <nav className="flex justify-between items-center px-6 py-4 flex-wrap md:flex-none mb-6 z-20 rounded-md bg-[#f3f4f6] sticky top-0 left-0 w-full">
       <div className="logoDiv">
         <h1 className="logo text-2xl font-bold text-orange-500 cursor-pointer">
           <NavLink to={"/"}>
@@ -58,7 +58,7 @@ const Navbar = () => {
               <NavLink
                 to={"/profile"}
                 className={({ isActive }) =>
-                  (isActive ? "active" : "") + " flex px-4 py-2"
+                  (isActive ? "active" : "") + " flex px-4 py-2 "
                 }
               >
                 Profile
