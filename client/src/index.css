@@ -52,8 +52,8 @@ a.orange {
   height: 200px;
   border-radius: 50%;
   display: block;
-  max-width: 80%;
-  object-fit: contain;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 
 card {

@@ -4,14 +4,17 @@ import { AuthContext } from "../../AuthContext";
 import { useContext, useState } from "react";
 import Loader from "../Loader/Loader";
 import DefaultAvatar from "../../Assets/default-avatar.jpg";
+import { BiSolidCameraPlus } from "react-icons/bi";
 
 const Profile = () => {
   const serverUri = import.meta.env.VITE_SERVER_URI;
   const navigate = useNavigate();
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout, setUser } = useContext(AuthContext);
   const [cvFile, SetCvFile] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isPicLoading, setIsPicLoading] = useState(false);
+  const [profileImageFile, setprofileImageFile] = useState(null);
 
   const handleFileChange = async (event) => {
     console.log(event.target.files[0]);
@@ -42,6 +45,7 @@ const Profile = () => {
       }
       const data = await res.json();
       user.cvFile = data.data.cvFile;
+      setUser(user);
       setError("");
       SetCvFile(null);
       setIsLoading(false);
@@ -67,6 +71,55 @@ const Profile = () => {
     );
   }
 
+  const handleProfileFileChange = async (event) => {
+    const selectedFile = event.target.files[0];
+    const token = localStorage.getItem("token");
+
+    if (!selectedFile) {
+      alert("No file selected.");
+      return;
+    }
+
+    // Check if the selected file is an image
+    const acceptedTypes = ["image/png", "image/jpeg", "image/webp"];
+    if (!acceptedTypes.includes(selectedFile.type)) {
+      alert("Please upload a valid image (PNG, JPEG, WEBP).");
+      event.target.value = ""; // Clear the file input
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("profilePic", selectedFile);
+    setIsPicLoading(true);
+
+    try {
+      // Make the API call to upload the image
+      const response = await fetch(`${serverUri}/users/profile-picture`, {
+        method: "POST",
+        headers: {
+          Authorization: `${token}`,
+        },
+        body: formData,
+      });
+
+      setIsPicLoading(false);
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const result = await response.json();
+      if (result.status == "success") {
+        user.profilePic = result.data.profilePic;
+        setUser(user);
+        setprofileImageFile(result.data.profilePic);
+      }
+    } catch (error) {
+      setIsPicLoading(false);
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <header className="bg-white shadow-md p-4 flex justify-between items-center">
@@ -82,11 +135,11 @@ const Profile = () => {
       <main className="mt-6">
         <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-10">Profile</h2>
-          <div className="flex justify-center items-center w-full mb-8">
-            {user.profilePic ? (
+          <div className="flex justify-center items-center w-fit mx-auto mb-8 relative">
+            {profileImageFile || user.profilePic ? (
               <img
                 className="custom-profile-pic"
-                src={user.profilePic}
+                src={profileImageFile || user.profilePic}
                 alt="profile picture"
               />
             ) : (
@@ -95,6 +148,21 @@ const Profile = () => {
                 src={DefaultAvatar}
                 alt="profile picture"
               />
+            )}
+            <BiSolidCameraPlus className="absolute bottom-3 right-3 h-10 w-10 cursor-pointer text-[#f57922] bg-white rounded-full z-1 p-2 " />
+            <input
+              className="input-file absolute left-0 top-0 opacity-0 h-full w-full cursor-pointer z-10"
+              type="file"
+              accept="image/png, image/jpeg, image/webp"
+              onChange={handleProfileFileChange}
+            />
+            {/* Loading */}
+            {isPicLoading ? (
+              <div className="absolute rounded-full flex items-center justify-center left-0 top-0 h-full w-full z-10 bg-black bg-opacity-50 ">
+                <Loader />
+              </div>
+            ) : (
+              ""
             )}
           </div>
           <p className="text-gray-700 mb-2">

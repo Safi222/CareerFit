@@ -134,43 +134,41 @@ const CVPilot = () => {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-          <div className="bg-white p-6 rounded-lg text-center gap-3">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-3">
+          <div className="bg-white relative p-6 rounded-lg text-center gap-3 w-full max-w-4xl">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               CV Analysis Results
             </h2>
-            <div>
-              <table className="min-w-full bg-white border border-gray-200">
-                <thead className="bg-orange-500 text-center">
-                  <tr>
-                    <th className="px-4 py-2 border-b">Job Title</th>
-                    <th className="px-4 py-2 border-b">Level</th>
-                    <th className="px-4 py-2 border-b">Score</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobsRecommendtions.map((job) => (
-                    <tr
-                      key={job.id}
-                      className="hover:bg-gray-100 cursor-pointer"
-                      onClick={() => navigateToJobs(job)}
-                    >
-                      <td className="px-4 py-2 border-b">{job.job_title}</td>
-                      <td className="px-4 py-2 border-b">{job.level}</td>
-                      <td className="px-4 py-2 border-b">
-                        {(job.relevance_score * 100).toFixed()}%
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div class="container mx-auto mt-10 p-4">
+              <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto">
+                {jobsRecommendtions.map((job) => (
+                  <div
+                    class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200"
+                    key={job.id}
+                  >
+                    <div class="p-4">
+                      <h2 class="text-xl font-semibold text-gray-800">
+                        {job.job_title}
+                      </h2>
+                      <p class="text-sm text-gray-500 mt-1">{job.level}</p>
+                      <p class="text-gray-600 mt-3">{job.reason}</p>
+                      <div class="mt-4 flex items-center justify-between">
+                        <span class="text-gray-700 font-medium">Score:</span>
+                        <span class="text-[#f57922] font-semibold">
+                          {(job.relevance_score * 100).toFixed()}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <button
               onClick={closeModal}
-              className="bg-red-500 mt-4 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              className="bg-[#f57922] text-white rounded-full font-bold text-lg absolute top-0 right-5 mt-4 px-2"
             >
-              Close
+              x
             </button>
           </div>
         </div>

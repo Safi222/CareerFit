@@ -20,6 +20,42 @@ const Search = (props) => {
     props.sendSearchData(searchData);
   };
 
+  const clearTitle = () => {
+    setQueryData(
+      new SearchData(
+        "",
+        searchData.company,
+        searchData.location,
+        searchData.type,
+        searchData.level
+      )
+    );
+  };
+
+  const clearCompany = () => {
+    setQueryData(
+      new SearchData(
+        searchData.title,
+        "",
+        searchData.location,
+        searchData.type,
+        searchData.level
+      )
+    );
+  };
+
+  const clearLocation = () => {
+    setQueryData(
+      new SearchData(
+        searchData.title,
+        searchData.company,
+        "",
+        searchData.type,
+        searchData.level
+      )
+    );
+  };
+
   return (
     <div className="SearchDiv grid gap-8 bg-gray-100 rounded-lg p-8 shadow-md">
       <form onSubmit={handleSearch}>
@@ -44,7 +80,14 @@ const Search = (props) => {
               className="bg-transparent text-gray-700 focus:outline-none w-full"
               placeholder="Search your fit..."
             />
-            <AiOutlineCloseCircle className="text-2xl text-gray-400 hover:text-gray-600 cursor-pointer" />
+            {searchData.title ? (
+              <AiOutlineCloseCircle
+                className="text-2xl text-gray-400 hover:text-gray-600 cursor-pointer"
+                onClick={clearTitle}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           {/* Search by Company */}
@@ -67,7 +110,14 @@ const Search = (props) => {
               className="bg-transparent text-gray-700 focus:outline-none w-full"
               placeholder="Search by company..."
             />
-            <AiOutlineCloseCircle className="text-2xl text-gray-400 hover:text-gray-600 cursor-pointer" />
+            {searchData.company ? (
+              <AiOutlineCloseCircle
+                className="text-2xl text-gray-400 hover:text-gray-600 cursor-pointer"
+                onClick={clearCompany}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           {/* Search by Location */}
@@ -90,7 +140,14 @@ const Search = (props) => {
               className="bg-transparent text-gray-700 focus:outline-none w-full"
               placeholder="Search by location..."
             />
-            <AiOutlineCloseCircle className="text-2xl text-gray-400 hover:text-gray-600 cursor-pointer" />
+            {searchData.location ? (
+              <AiOutlineCloseCircle
+                className="text-2xl text-gray-400 hover:text-gray-600 cursor-pointer"
+                onClick={clearLocation}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           {/* Search Button */}
