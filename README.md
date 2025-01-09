@@ -39,7 +39,7 @@ CareerFit is a platform designed to assist fresh graduates in finding jobs by an
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Safi222/CareerFit
    cd CareerFit/server
    ```
 
