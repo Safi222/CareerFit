@@ -143,11 +143,12 @@ const CVPilot = () => {
               <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto">
                 {jobsRecommendtions.map((job) => (
                   <div
-                    class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200"
+                    class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 hover:bg-gray-100 hover:cursor-pointer"
                     key={job.id}
+                    onClick={() => navigateToJobs(job)}
                   >
                     <div class="p-4">
-                      <h2 class="text-xl font-semibold text-gray-800">
+                      <h2 class="text-xl font-semibold text-gray-800 ">
                         {job.job_title}
                       </h2>
                       <p class="text-sm text-gray-500 mt-1">{job.level}</p>

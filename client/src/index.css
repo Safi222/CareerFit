@@ -49,11 +49,11 @@ a.orange {
 
 .custom-profile-pic {
   width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  display: block;
-  -o-object-fit: cover;
-  object-fit: cover;
+    height: 200px;
+    border-radius: 50%;
+    display: block;
+    -o-object-fit: cover;
+    object-fit: cover;
 }
 
 card {
