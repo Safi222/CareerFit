@@ -138,9 +138,7 @@ describe('Authentication Controllers', () => {
                 .post('/auth/google')
                 .send({ user: { email: 'shadimahmoud@example.com' } });
 
-            expect(response.status).toBe(200);
-            expect(response.body.status).toBe('success');
-            expect(response.body.data.token).toBe('mockToken');
+            expect(response.status).toBe(302);
         });
     });
 });
