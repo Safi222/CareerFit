@@ -153,7 +153,7 @@ const Profile = () => {
             <input
               className="input-file absolute left-0 top-0 opacity-0 h-full w-full cursor-pointer z-10"
               type="file"
-              accept="image/png, image/jpeg, image/webp"
+              accept="image/png, image/jpeg, image/webp, image/jpg"
               onChange={handleProfileFileChange}
             />
             {/* Loading */}
