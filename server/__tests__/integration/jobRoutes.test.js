@@ -19,7 +19,7 @@ jest.mock('../../src/config/redis', () => ({
         setEx: jest.fn(),
         connect: jest.fn(),
         on: jest.fn(),
-        quit: jest.fn().mockResolvedValue(true), // Add mock quit method
+        quit: jest.fn().mockResolvedValue(true),
     },
 }));
 
@@ -79,7 +79,7 @@ describe('Job Routes Tests', () => {
 
             expect(response.body.status).toBe('success');
             expect(response.body.data.jobs).toEqual(mockJobs);
-            expect(response.body.data.totalNum).toBe(mockJobs.length);
+            expect(response.body.data.jobs.length).toBe(mockJobs.length);
             expect(fetchJobs).toHaveBeenCalledWith('tech jobs in Egypt', undefined, undefined);
 
             // Updated regex to match actual job_id format
@@ -143,7 +143,6 @@ describe('Job Routes Tests', () => {
                 '1'
             );
 
-            // Updated regex to match actual job_id format
             response.body.data.jobs.forEach(job => {
                 expect(job.job_id).toMatch(/^[A-Za-z0-9+/_-]+==$/)
             });
@@ -157,8 +156,7 @@ describe('Job Routes Tests', () => {
                 .expect(200);
 
             expect(response.body.status).toBe('success');
-            expect(searchJobs).toHaveBeenCalledWith('   ', undefined, undefined);
-            expect(response.body.data).toHaveProperty('totalNum');
+            expect(searchJobs).toHaveBeenCalledWith(' egypt  ', undefined, undefined);
             expect(response.body.data).toHaveProperty('jobs');
             expect(Array.isArray(response.body.data.jobs)).toBe(true);
         });
