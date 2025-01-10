@@ -1,10 +1,12 @@
-import { useNavigate } from "react-router-dom";
 import { GiUpgrade } from "react-icons/gi";
 import { MdAssessment } from "react-icons/md";
 import { MdRecommend } from "react-icons/md";
 import { MdPrivacyTip } from "react-icons/md";
 import Cvpilot from "../../Assets/Cvpilot.png";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Loader from "../Loader/Loader";
+
 const FeaturesData = [
   {
     id: 1,
@@ -33,16 +35,43 @@ const FeaturesData = [
 ];
 
 const CVPilot = () => {
+  const serverUri = import.meta.env.VITE_SERVER_URI;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [error, setError] = useState(null);
+  const [jobsRecommendtions, setJobsRecommendtions] = useState([]);
+  const [loginPrompt, setLoginPrompt] = useState(false); // New state for login prompt
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleAnalyzeClick = () => {
-    if (isLoggedIn) {
+  const handleAnalyzeClick = async () => {
+    if (!token) {
+      setLoginPrompt(true);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${serverUri}/cv/analyze`, {
+        method: "GET",
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`API request failed with status ${res.status}`);
+      }
+
+      const data = await res.json();
+      setJobsRecommendtions(data.data.recommendation.recommendations);
+      setError(null);
+      console.log(data);
       setIsModalOpen(true);
-    } else {
-      alert("You need to log in to use this feature!");
-      navigate("/login");
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
     }
   };
 
@@ -50,10 +79,18 @@ const CVPilot = () => {
     setIsModalOpen(false);
   };
 
+  const navigateToJobs = (job) => {
+    navigate(`/jobs?job_title=${job.job_title}&level=${job.level}`);
+  };
+
+  const handleLoginRedirect = () => {
+    setLoginPrompt(false);
+    navigate("/login");
+  };
+
   return (
     <div className="container mx-auto px-6 py-20">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        {/* Right Components */}
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-6">
             Hello, My name is CvPilot
@@ -63,7 +100,6 @@ const CVPilot = () => {
           </h2>
         </div>
 
-        {/* Left Components */}
         <div className="text-center">
           <img src={Cvpilot} alt="CvPilot" className="w-80 h-auto mx-auto" />
         </div>
@@ -87,34 +123,69 @@ const CVPilot = () => {
       </div>
 
       <div className="mt-10 text-center">
-        <input type="file" id="cv-upload" className="block mx-auto mb-4" />
+        {error && <div className="text-red-500 mb-4">{error}</div>}
         <button
+          disabled={isLoading}
           onClick={handleAnalyzeClick}
-          className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
+          className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition flex justify-center items-center gap-3 mx-auto"
         >
-          Analyze Your CV 🤖
+          Analyze Your CV 🤖 {isLoading && <Loader />}
         </button>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg text-center gap-3">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-3">
+          <div className="bg-white relative p-6 rounded-lg text-center gap-3 w-full max-w-4xl">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               CV Analysis Results
             </h2>
-            <p className="text-gray-600 mb-2">
-              Your CV scored{" "}
-              <span className="font-bold text-green-600">85/100</span> points.
-            </p>
-            <p className="text-gray-600 mb-6">
-              Recommended jobs: Software Engineer, Data Scientist, Product
-              Manager.
-            </p>
+            <div class="container mx-auto mt-10 p-4">
+              <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto">
+                {jobsRecommendtions.map((job) => (
+                  <div
+                    class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 hover:bg-gray-100 hover:cursor-pointer"
+                    key={job.id}
+                    onClick={() => navigateToJobs(job)}
+                  >
+                    <div class="p-4">
+                      <h2 class="text-xl font-semibold text-gray-800 ">
+                        {job.job_title}
+                      </h2>
+                      <p class="text-sm text-gray-500 mt-1">{job.level}</p>
+                      <p class="text-gray-600 mt-3">{job.reason}</p>
+                      <div class="mt-4 flex items-center justify-between">
+                        <span class="text-gray-700 font-medium">Score:</span>
+                        <span class="text-[#f57922] font-semibold">
+                          {(job.relevance_score * 100).toFixed()}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={closeModal}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              className="bg-[#f57922] text-white rounded-full font-bold text-lg absolute top-0 right-5 mt-4 px-2"
             >
-              Close
+              x
+            </button>
+          </div>
+        </div>
+      )}
+
+      {loginPrompt && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
+          <div className="bg-white p-6 rounded-lg text-center">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">
+              You need to log in to analyze your CV.
+            </h2>
+            <button
+              onClick={handleLoginRedirect}
+              className="bg-orange-400 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition"
+            >
+              Go to Sign In
             </button>
           </div>
         </div>

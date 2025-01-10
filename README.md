@@ -1,11 +1,10 @@
-# CareerFit
-
-CareerFit is a cutting-edge job search platform designed to connect job seekers with the most perfect job opportunities.
+# CareerFit Backend Documentation
 
 ## Overview
 
-The application uses advanced algorithms and integrated simple AI model to match your CV with the most suitable jobs based on your skills, experience, and preferences. With a seamless, intuitive interface, CareerFit helps you discover opportunities, evaluate your CV's strengths, and stay up-to-date with the latest job market trends with smooth job reviewing.
+CareerFit is a platform designed to assist fresh graduates in finding jobs by analyzing their CVs and providing insightful reviews. This backend API powers the CareerFit platform by handling user authentication, CV analysis, job recommendations, and more.
 
+---
 ## Features
 
 - **Job Search**: Search for job CV
@@ -15,26 +14,284 @@ The application uses advanced algorithms and integrated simple AI model to match
 - **Scrollable Job Feed**: Users can scroll through available jobs with filtering options to narrow down their search.
 - **Personalized Recommendations**: Sends tailored job alerts and notifications based on the user's profile and preferences.
 
+---
+## Backend
+
+## Table of Contents
+
+1. [Setup and Installation](#setup-and-installation)
+2. [API Endpoints](#api-endpoints)
+3. [Error Handling](#error-handling)
+4. [Technologies Used](#technologies-used)
+5. [Authors](#authors)
+---
+
+## Setup and Installation
+
+### Prerequisites
+
+- Node.js (>= 14.x)
+- MongoDB
+- Redis
+
+### Installation Steps
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Safi222/CareerFit
+   cd CareerFit/server
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the server:
+
+   ```bash
+   npm start
+   ```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+#### Register User
+
+**POST** `/auth/register`
+
+**Request Body:**
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+
+- Success (201):
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "token": "<jwt-token>"
+    }
+  }
+  ```
+- Error (400): Email already in use.
+
+#### Login User
+
+**POST** `/auth/login`
+
+**Request Body:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+
+- Success (200):
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "token": "<jwt-token>"
+    }
+  }
+  ```
+- Error (404): User not found.
+- Error (400): Incorrect password.
+
+#### Google Authentication
+
+**GET** `/auth/google`
+
+**Description:** Redirects to Google for authentication.
+
+**GET** `/auth/google/callback`
+
+**Description:** Handles Google OAuth callback and returns a token.
+
+---
+
+### CV Analysis
+
+#### Analyze CV
+
+**GET** `/cv/analyze`
+
+**Headers:**
+
+```json
+{
+  "Authorization": "Bearer <jwt-token>"
+}
+```
+
+**Response:**
+
+- Success (200):
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "recommendation": ["Software Engineer", "Data Analyst"]
+    }
+  }
+  ```
+- Error (404): CV not found.
+
+---
+
+### Job Management
+
+#### Fetch Jobs
+
+**GET** `/jobs/home`
+
+**Query Parameters:**
+
+- `query` (string, optional): Search query.
+- `page` (number, optional): Page number.
+- `num_pages` (number, optional): Number of pages to fetch.
+
+**Response:**
+
+- Success (200):
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "jobs": [ { "title": "Software Engineer", "location": "Cairo" } ]
+    }
+  }
+  ```
+- Error (500): Failed to fetch jobs.
+
+#### Search Jobs
+
+**GET** `/jobs/search`
+
+**Query Parameters:**
+
+- `title`, `location`, `type`, `level` (all optional): Filters for job search.
+- `page`, `num_pages` (optional): Pagination.
+
+**Response:** Similar to `/jobs/home`.
+
+---
+
+### User Management
+
+#### Upload Profile Picture
+
+**POST** `/user/profile-picture`
+
+**Headers:**
+
+```json
+{
+  "Authorization": "Bearer <jwt-token>"
+}
+```
+
+**Form Data:**
+
+- `profilePic`: File upload (image).
+
+**Response:**
+
+- Success (200):
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "profilePic": "<image-url>"
+    }
+  }
+  ```
+
+#### Upload CV
+
+**POST** `/user/cv`
+
+**Headers:** Same as `/user/profile-picture`.
+
+**Form Data:**
+
+- `cvFile`: File upload (PDF).
+
+**Response:**
+
+- Success (200): CV uploaded successfully.
+
+#### Get User Profile
+
+**GET** `/user/profile`
+
+**Headers:** Same as `/user/profile-picture`.
+
+**Response:**
+
+- Success (200):
+  ```json
+  {
+    "status": "success",
+    "data": {
+      "user": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com"
+      }
+    }
+  }
+  ```
+
+---
+
+## Error Handling
+
+Errors are returned in the following format:
+
+```json
+{
+  "status": "fail",
+  "data": {
+    "title": "Error message"
+  }
+}
+```
+
+---
+
+## Technologies Used
+
+- **Node.js**
+- **Express.js**
+- **MongoDB**
+- **Redis**
+- **Cloudinary**
+- **Passport.js** for authentication
+- **Bull** for background processing
+
+
 ## Authors
 
 - **Shadi Mahmoud** - [GitHub](https://github.com/shadi) - backend developer
 - **Ahmed Khalid** - [GitHub](https://github.com/ah0048) - backend develope
-- **Safia Gibril Nouman** - [GitHub](https://github.com/safi222)
-- **Khaled Mohamed Anwer** - [GitHub](https://github.com/khaledmohamed8895) - front-end
-
-## Getting Started
-
-To get a local copy up and running, follow these simple steps.
-To get started with Talkify, follow these steps:
-
-1. Clone this repository.
-2. Navigate to the api folder and install the required dependencies by running pip install -r requirements.txt.
-3. Start the API server by running python app.py.
-4. Navigate to the client folder and install the required dependencies by running npm install.
-5. Start the client development server by running npm run dev.
-That's it! You can now access CareerFit in your web browser and find the job that fits you!.
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm (v6 or higher)
+- **Safia Gibril Nouman** - [GitHub](https://github.com/safi222) - frontend developer
+- **Khaled Mohamed Anwer** - [GitHub](https://github.com/khaledmohamed8895) - frontend developer

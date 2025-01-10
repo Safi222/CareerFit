@@ -1,17 +1,29 @@
 /* eslint-disable react/prop-types */
 import { BiTimeFive } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Jobs.css";
 import SearchData from "../SearchD/searchData";
 import Search from "../SearchD/Search";
+import { useSearchParams } from "react-router-dom";
+import Loader from "../Loader/Loader";
 
 const Jobs = (props) => {
+  const [searchParams] = useSearchParams();
+  const job_title = searchParams.get("job_title");
+  const level = searchParams.get("level");
+
   const serverUri = import.meta.env.VITE_SERVER_URI;
   const [jobs, setJobs] = useState([]);
   const [counter, setCounter] = useState(1);
+  const [viewMoreStatus, setViewMoreStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchData, setSearchData] = useState(new SearchData());
+  const isInitialMount = useRef(true);
+  const addMoreStatus = useRef(false);
+  const fromSearch = useRef(false);
 
   const getJobsHome = (AddMore = false) => {
+    setIsLoading(true);
     fetch(`${serverUri}/jobs/home?page=${counter}&num_pages=1`)
       .then((res) => res.json())
       .then((d) => {
@@ -20,11 +32,21 @@ const Jobs = (props) => {
         } else {
           setJobs([...d.data.jobs]);
         }
+        setViewMoreStatus(d.data.jobs.length ? true : false);
+        setIsLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
   };
 
   const getJobs = (AddMore = false) => {
+    setIsLoading(true);
+    if ((job_title || level) && isInitialMount.current) {
+      searchData.title = job_title;
+      searchData.level = level;
+    }
     fetch(
       `${serverUri}/jobs/search?title=${searchData.title}&company=${searchData.company}&location=${searchData.location}&type=${searchData.type}&level=${searchData.level}&page=${counter}&num_pages=1`
     )
@@ -35,32 +57,39 @@ const Jobs = (props) => {
         } else {
           setJobs([...d.data.jobs]);
         }
+        setViewMoreStatus(d.data.jobs.length ? true : false);
+        setIsLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+      });
   };
 
-  const getMoreJobs = () => {
+  const getMoreJobs = async () => {
+    addMoreStatus.current = true;
     setCounter(counter + 1);
-    getJobs(true);
   };
 
   useEffect(() => {
-    if (props?.fromHome) {
-      getJobsHome();
+    if (props?.fromHome && !fromSearch.current) {
+      getJobsHome(addMoreStatus.current);
     } else {
-      getJobs();
+      getJobs(addMoreStatus.current);
     }
-  }, []);
+    isInitialMount.current = false;
+  }, [counter, searchData]);
 
   const handleSearchData = (searchData) => {
+    addMoreStatus.current = false;
+    fromSearch.current = true;
     setCounter(1);
     setSearchData(searchData);
-    getJobs();
   };
 
   return (
     <>
-      <Search sendSearchData={handleSearchData} />
+      <Search isLoading={isLoading} sendSearchData={handleSearchData} />
       <div className="container mx-auto px-4">
         <div className="jobContainer grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10">
           {jobs.map(
@@ -97,7 +126,7 @@ const Jobs = (props) => {
                     {job_description}
                   </p>
 
-                  <div className="company mt-auto flex items-center gap-2 mt-4">
+                  <div className="company mt-auto flex items-center gap-2 ">
                     <img
                       src={employer_logo}
                       alt={`${job_country} logo`}
@@ -120,15 +149,22 @@ const Jobs = (props) => {
           )}
         </div>
 
+        <div> {isLoading ? <Loader size="50px" /> : ""}</div>
+
         {/* Add the View More Fits button with Link */}
-        <div className="text-center mt-6">
-          <button
-            onClick={getMoreJobs}
-            className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition"
-          >
-            View More Fits
-          </button>
-        </div>
+        {viewMoreStatus ? (
+          <div className="text-center mt-6">
+            <button
+              disabled={isLoading}
+              onClick={getMoreJobs}
+              className="bg-orange-400 text-white px-6 py-2 rounded-lg hover:bg-orange-500 transition flex justify-center items-center gap-3 mx-auto"
+            >
+              View More jobs {isLoading ? <Loader /> : ""}
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

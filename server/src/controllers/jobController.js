@@ -14,7 +14,6 @@ const getJobs = async(req, res) => {
         return res.status(200).json({
             status: "success",
             data: {
-                totalNum: jobs.length,
                 jobs
             },
         });
@@ -39,13 +38,12 @@ const searchJobsController = async(req, res) => {
         const { title, location, type, level, page, num_pages } = req.query;
 
         // Construct filters object
-        const query = `${title?title:''} ${location?location:''} ${type?type:''} ${level?level:''}`
+        const query = `${title?title:''} ${location?location:'egypt'} ${type?type:''} ${level?level:''}`
 
         const jobs = await searchJobs(query, page, num_pages);
         return res.status(200).json({
             status: "success",
             data: {
-                totalNum: jobs.length,
                 jobs
             },
         });
