@@ -29,7 +29,7 @@ describe('profileController', () => {
 
         await profileController(req, res);
 
-        expect(User.findById).toHaveBeenCalledWith('mockUserId', 'firstName lastName email profilePic');
+        expect(User.findById).toHaveBeenCalledWith('mockUserId', 'firstName lastName email profilePic cvFile');
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
             status: "success",
@@ -47,7 +47,7 @@ describe('profileController', () => {
 
         await profileController(req, res);
 
-        expect(User.findById).toHaveBeenCalledWith('mockUserId', 'firstName lastName email profilePic');
+        expect(User.findById).toHaveBeenCalledWith('mockUserId', 'firstName lastName email profilePic cvFile');
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({
             status: "error",
