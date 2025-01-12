@@ -50,16 +50,16 @@ Installation Steps:
 ## Project Structure
 
 Components:
-`Slogan`: Displays the website slogan.
-`Login`: Handles user authentication.
-`Register`: For new user registration.
-`Search`: Enables job searches.
-`Value`: Highlights the application's core values.
-`AboutUs`: Provides information about the team and project.
-`Footer`: Includes links copyright details and contact information.
-`Jobs`: Displays job listings.
-`Profile`: Provides an overview of user activity and stats.
-`CVPilot`: Helps users build and upload their CVs.
+1. `Slogan`: Displays the website slogan.
+2. `Login`: Handles user authentication.
+3. `Register`: For new user registration.
+4. `Search`: Enables job searches.
+5. `Value`: Highlights the application's core values.
+6. `AboutUs`: Provides information about the team and project.
+7. `Footer`: Includes links copyright details and contact information.
+8. `Jobs`: Displays job listings.
+9. `Profile`: Provides an overview of user activity and stats.
+10. `CVPilot`: Helps users build and upload their CVs.
 
 ## Technologies Used Frontend
 
