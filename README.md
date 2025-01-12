@@ -15,6 +15,68 @@ CareerFit is a platform designed to assist fresh graduates in finding jobs by an
 - **Personalized Recommendations**: Sends tailored job alerts and notifications based on the user's profile and preferences.
 
 ---
+## Frontend
+
+## Table of Contents Frontend
+
+1. [Setup and Installation Frontend](#setup-and-installation-frontend)  
+2. [Project Structure](#project-structure)  
+3. [Technologies Used Frontend](#technologies-used-frontend)  
+4. [API Integration with Backend](#api-integration-with-backend)  
+
+## Setup and Installation Frontend
+
+Installation Steps:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Safi222/CareerFit
+   cd CareerFit/client
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Start the server:
+
+   ```bash
+   npm run dev
+   ```
+
+## Project Structure
+
+Components:
+`Slogan`: Displays the website slogan.
+`Login`: Handles user authentication.
+`Register`: For new user registration.
+`Search`: Enables job searches.
+`Value`: Highlights the application's core values.
+`AboutUs`: Provides information about the team and project.
+`Footer`: Includes links copyright details and contact information.
+`Jobs`: Displays job listings.
+`Profile`: Provides an overview of user activity and stats.
+`CVPilot`: Helps users build and upload their CVs.
+
+## Technologies Used Frontend
+
+1. React.js: For building user interfaces.
+2. Vite: A fast build tool and development server.
+3. Tailwind CSS: For efficient and modern styling.
+
+## API Integration with Backend
+
+The frontend is integrated with the backend API to support:
+
+1. User authentication and authorization
+2. Job searching and listing
+3. CV upload and analysis
+4. User dashboard with analytics
+5. Ensure the backend server is running at the specified port for API requests.
+
 ## Backend
 
 ## Table of Contents
