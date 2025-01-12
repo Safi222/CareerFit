@@ -1,14 +1,16 @@
 /* eslint-disable react/prop-types */
 import { BiTimeFive } from "react-icons/bi";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useContext, useRef, useState } from "react";
 import "./Jobs.css";
 import SearchData from "../SearchD/searchData";
 import Search from "../SearchD/Search";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthContext";
 import Loader from "../Loader/Loader";
 
 const Jobs = (props) => {
   const [searchParams] = useSearchParams();
+  const tokenParam = searchParams.get("token");
   const job_title = searchParams.get("job_title");
   const level = searchParams.get("level");
 
@@ -21,6 +23,9 @@ const Jobs = (props) => {
   const isInitialMount = useRef(true);
   const addMoreStatus = useRef(false);
   const fromSearch = useRef(false);
+  const navigate = useNavigate();
+  const { fetchUserProfile } = useContext(AuthContext);
+  
 
   const getJobsHome = (AddMore = false) => {
     setIsLoading(true);
@@ -86,6 +91,15 @@ const Jobs = (props) => {
     setCounter(1);
     setSearchData(searchData);
   };
+  
+  useEffect(() => {
+    if (tokenParam) {
+      localStorage.setItem("token", tokenParam);
+      fetchUserProfile().then(() => {
+        navigate("/profile");
+      });
+    }
+  }, []);
 
   return (
     <>
