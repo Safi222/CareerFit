@@ -77,6 +77,8 @@ The frontend is integrated with the backend API to support:
 4. User dashboard with analytics
 5. Ensure the backend server is running at the specified port for API requests.
 
+---
+
 ## Backend
 
 ## Table of Contents
