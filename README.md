@@ -291,7 +291,7 @@ Errors are returned in the following format:
 
 ## Authors
 
-- **Shadi Mahmoud** - [GitHub](https://github.com/shadi) - backend developer
-- **Ahmed Khalid** - [GitHub](https://github.com/ah0048) - backend develope
+- **Shadi Mahmoud** - [GitHub](https://github.com/Oxshady) - backend developer
+- **Ahmed Khalid** - [GitHub](https://github.com/ah0048) - backend developer
 - **Safia Gibril Nouman** - [GitHub](https://github.com/safi222) - frontend developer
 - **Khaled Mohamed Anwer** - [GitHub](https://github.com/khaledmohamed8895) - frontend developer

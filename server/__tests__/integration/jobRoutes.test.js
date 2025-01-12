@@ -156,7 +156,7 @@ describe('Job Routes Tests', () => {
                 .expect(200);
 
             expect(response.body.status).toBe('success');
-            expect(searchJobs).toHaveBeenCalledWith(' egypt  ', undefined, undefined);
+            expect(searchJobs).toHaveBeenCalledWith(' US  ', undefined, undefined);
             expect(response.body.data).toHaveProperty('jobs');
             expect(Array.isArray(response.body.data.jobs)).toBe(true);
         });
