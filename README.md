@@ -5,9 +5,18 @@
 CareerFit is a platform designed to assist fresh graduates in finding jobs by analyzing their CVs and providing insightful reviews. This backend API powers the CareerFit platform by handling user authentication, CV analysis, job recommendations, and more.
 
 ---
+
+## Deployment Links
+
+- **Frontend**: [CareerFit Frontend](https://career-fit-shadis-projects-ba9a32fd.vercel.app/)
+- **Backend**: [CareerFit Backend](https://careerfit-x2ww.onrender.com/)
+- **Access the Platform**: [CareerFit Platform](https://career-fit-shadis-projects-ba9a32fd.vercel.app/)
+
+---
+
 ## Features
 
-- **Job Search**: Search for job CV
+- **Job Search**: Search for job CV.
 - **Matching with Jobs**: Matches user CVs with relevant job listings based on skills, experience, and qualifications.
 - **CV Scoring & Weaknesses**: Provides a score for each CV based on its match with job descriptions, along with feedback on areas for improvement.
 - **Latest Job Listings**: Offers real-time job updates, categorized by industry and role, to help users stay up-to-date with the job market.
@@ -15,6 +24,7 @@ CareerFit is a platform designed to assist fresh graduates in finding jobs by an
 - **Personalized Recommendations**: Sends tailored job alerts and notifications based on the user's profile and preferences.
 
 ---
+
 ## Frontend
 
 ## Table of Contents Frontend
@@ -56,7 +66,7 @@ Components:
 4. `Search`: Enables job searches.
 5. `Value`: Highlights the application's core values.
 6. `AboutUs`: Provides information about the team and project.
-7. `Footer`: Includes links copyright details and contact information.
+7. `Footer`: Includes links, copyright details, and contact information.
 8. `Jobs`: Displays job listings.
 9. `Profile`: Provides an overview of user activity and stats.
 10. `CVPilot`: Helps users build and upload their CVs.
@@ -88,6 +98,7 @@ The frontend is integrated with the backend API to support:
 3. [Error Handling](#error-handling)
 4. [Technologies Used](#technologies-used)
 5. [Authors](#authors)
+
 ---
 
 ## Setup and Installation
@@ -352,6 +363,7 @@ Errors are returned in the following format:
 - **Passport.js** for authentication
 - **Bull** for background processing
 
+---
 
 ## Authors
 
@@ -359,3 +371,4 @@ Errors are returned in the following format:
 - **Ahmed Khalid** - [GitHub](https://github.com/ah0048) - backend developer
 - **Safia Gibril Nouman** - [GitHub](https://github.com/safi222) - frontend developer
 - **Khaled Mohamed Anwer** - [GitHub](https://github.com/khaledmohamed8895) - frontend developer
+
