@@ -8,8 +8,6 @@ CareerFit is a platform designed to assist fresh graduates in finding jobs by an
 
 ## Deployment Links
 
-- **Frontend**: [CareerFit Frontend](https://career-fit-shadis-projects-ba9a32fd.vercel.app/)
-- **Backend**: [CareerFit Backend](https://careerfit-x2ww.onrender.com/)
 - **Access the Platform**: [CareerFit Platform](https://career-fit-shadis-projects-ba9a32fd.vercel.app/)
 
 ---
